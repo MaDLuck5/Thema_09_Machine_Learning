@@ -1,0 +1,28 @@
+---
+title: "Logbook"
+output: html_document
+---
+
+#Dataset
+
+the data set "Epileptic Seizure Recognition" consist of a restructere/reshaped version of a common used dataset.
+the data
+```{r}
+data <- read.csv('C:\\Users\\matsp\\Downloads\\archive\\Epileptic Seizure Recognition.csv')
+data$y <- as.factor(data$y)
+summary(data)
+```
+position the caret at any line or the code chunk, then click "+".
+
+The code chunk appears:
+```{r}
+```
+
+Type any R code in the chunk, for example:
+```{r}
+mycars <- within(mtcars, { cyl <- ordered(cyl) })
+mycars
+```
+
+Now, click the **Run** button on the chunk toolbar to [execute](https://www.jetbrains.com/help/pycharm/r-markdown.html#run-r-code) the chunk code. The result should be placed under the chunk.
+Click the **Knit and Open Document** to build and preview an output.
