@@ -7,7 +7,8 @@ author:
     - Zernikeplein 11
     - room D1.12
     email: m.p.slik@st.hanze.nl
-abstract: >
+abstract:the data were used to assess how the mutations in the DNA are affecting the protein expression landscape in breast cancer. Genes in our DNA are first transcribed into RNA molecules which then are translated into proteins. Changing the information content of DNA has impact on the behavior of the proteome, which is the main functional unit of cells, taking care of cell division, DNA repair, enzymatic reactions and signaling etc. They performed K-means clustering on the protein data to divide the breast cancer patients into sub-types, each having unique protein expression signature. They found that the best clustering was achieved using 3 clusters (original PAM50 gene set yields four different subtypes using RNA data).
+my question is are there different ways to categorize subtypes of breast cancer other than the PAM50 method, and define them as benign or malignant?
 
 date: June 15th, 2022
 output:
@@ -47,19 +48,35 @@ This data set contains published iTRAQ proteome profiling of 77 breast cancer sa
     * **Contains**  the list of genes and proteins used by the PAM50 classification system. The column RefSeqProteinID contains the protein IDs that can be matched with the IDs in the main protein expression data set.
 
 **Past Research:**
-The original study: *http://www.nature.com/nature/journal/v534/n7605/full/nature18003.html* (paywall warning)
+Original research paper: https://www.researchgate.net/publication/303509927_Proteogenomics_connects_somatic_mutations_to_signaling_in_breast_cancer
 
-**In brief:** the data were used to assess how the mutations in the DNA are affecting the protein expression landscape in breast cancer. Genes in our DNA are first transcribed into RNA molecules which then are translated into proteins. Changing the information content of DNA has impact on the behavior of the proteome, which is the main functional unit of cells, taking care of cell division, DNA repair, enzymatic reactions and signaling etc. They performed K-means clustering on the protein data to divide the breast cancer patients into sub-types, each having unique protein expression signature. They found that the best clustering was achieved using 3 clusters (original PAM50 gene set yields four different subtypes using RNA data).
-
+**Summary:** the data were used to assess how the mutations in the DNA are affecting the protein expression landscape in breast cancer. Genes in our DNA are first transcribed into RNA molecules which then are translated into proteins. Changing the information content of DNA has impact on the behavior of the proteome, which is the main functional unit of cells, taking care of cell division, DNA repair, enzymatic reactions and signaling etc. They performed K-means clustering on the protein data to divide the breast cancer patients into sub-types, each having unique protein expression signature. They found that the best clustering was achieved using 3 clusters (original PAM50 gene set yields four different subtypes using RNA data).
+my question is are there different ways to categorize subtypes of breast cancer other than the PAM50 method, and define them as benign or malignant?
 ```{r}
-#data <- read.csv('C:\\Users\\matsp\\Downloads\\archive\\Epileptic Seizure Recognition.csv')
-#data$y <- as.factor(data$y)
-#summary(data)
+# packages
+
 ```
-position the caret at any line or the code chunk, then click "+".
-
-The code chunk appears:
 ```{r}
+proteomes_data <- read.csv(file = "Data//77_cancer_proteomes_CPTAC_itraq.csv")
+clinical_data <- read.csv(file = "Data/clinical_data_breast_cancer.csv")
+pam50_protein_data <- read.csv(file = "Data/PAM50_proteins.csv")
+
+# showing succeseful loading of data
+head(proteomes_data[1:5], n = 5)
+head(clinical_data, n=5)
+head(pam50_protein_data, n=5)
+
+# showing structure of dataframe
+str(proteomes_data)
+str(clinical_data)
+str(pam50_protein_data)
+```
+
+## codebook
+```{r}
+
+codebook1 <- read.csv2("Data/77_cancer_proteomes_CPTAC_codebook.txt")
+codebook2 <- read.csv2("Data/clinical_data_breast_cancer_codebook.txt")
 ```
 
 Type any R code in the chunk, for example:

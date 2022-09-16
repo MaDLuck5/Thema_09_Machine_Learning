@@ -1,7 +1,7 @@
 Column;Description;type;unit
-Complete TCGA ID;TCGA ID;Name;NA
+Complete_TCGA_ID;TCGA ID;Name;NA
 Gender;Gender;Name;NA
-Age at Initial Pathologic Diagnosis;Age at Initial Pathologic Diagnosis
+Age_at_Initial_Pathologic_Diagnosis;Age at Initial Pathologic Diagnosis;Descriptive;
 ER Status;ER Status;;Descriptive;NA
 PR Status;PR Status;;Descriptive;NA
 HER2 Final Status;;Descriptive;NA
