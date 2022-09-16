@@ -1,0 +1,31 @@
+Column;Description;type;unit
+Complete TCGA ID;TCGA ID;Name;NA
+Gender;Gender;Name;NA
+Age at Initial Pathologic Diagnosis;Age at Initial Pathologic Diagnosis
+ER Status;ER Status;;Descriptive;NA
+PR Status;PR Status;;Descriptive;NA
+HER2 Final Status;;Descriptive;NA
+Tumor;;Descriptive;NA
+Tumor--T1 Coded;;Descriptive;NA
+Node;;Descriptive;NA
+Node-Coded;;Descriptive;NA
+Metastasis;;Descriptive;NA
+Metastasis-Coded;;Descriptive;NA
+AJCC Stage;;Descriptive;NA
+Converted Stage;;Descriptive;NA
+Survival Data Form;;Descriptive;NA
+Vital Status;;Descriptive;NA
+Days to Date of Last Contact;;Time;Days
+Days to date of Death;;Time;Days
+OS event;;Descriptive;
+OS Time;;Time;Hours
+PAM50 mRNA;;Descriptive;
+SigClust Unsupervised mRNA;;Number;
+SigClust Intrinsic mRNA;;Number;
+miRNA Clusters;;Number;
+methylation Clusters;;Number;
+RPPA Clusters;;Descriptive;
+CN Clusters;;Number;
+Integrated Clusters (with PAM50);;int;
+Integrated Clusters (no exp);;int
+Integrated Clusters (unsup exp);;int;
