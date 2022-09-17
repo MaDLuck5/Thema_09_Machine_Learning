@@ -1,31 +1,31 @@
 Column;Description;type;unit
 Complete_TCGA_ID;TCGA ID;Name;NA
 Gender;Gender;Name;NA
-Age_at_Initial_Pathologic_Diagnosis;Age at Initial Pathologic Diagnosis;Descriptive;
-ER Status;ER Status;;Descriptive;NA
-PR Status;PR Status;;Descriptive;NA
-HER2 Final Status;;Descriptive;NA
-Tumor;;Descriptive;NA
-Tumor--T1 Coded;;Descriptive;NA
-Node;;Descriptive;NA
-Node-Coded;;Descriptive;NA
-Metastasis;;Descriptive;NA
-Metastasis-Coded;;Descriptive;NA
-AJCC Stage;;Descriptive;NA
-Converted Stage;;Descriptive;NA
-Survival Data Form;;Descriptive;NA
-Vital Status;;Descriptive;NA
-Days to Date of Last Contact;;Time;Days
-Days to date of Death;;Time;Days
-OS event;;Descriptive;
-OS Time;;Time;Hours
-PAM50 mRNA;;Descriptive;
-SigClust Unsupervised mRNA;;Number;
-SigClust Intrinsic mRNA;;Number;
-miRNA Clusters;;Number;
-methylation Clusters;;Number;
-RPPA Clusters;;Descriptive;
-CN Clusters;;Number;
-Integrated Clusters (with PAM50);;int;
-Integrated Clusters (no exp);;int
-Integrated Clusters (unsup exp);;int;
+Age_at_Initial_Pathologic_Diagnosis;Age at Initial Pathologic Diagnosis;Descriptive;NA
+ER Status;Estrogen receptor Status;Descriptive;NA
+PR Status;Progesterone receptor Status;Descriptive;NA
+HER2 Final Status;Human Epidermal growth factor Receptor 2;Descriptive;NA
+Tumor;Tumor;Descriptive;NA
+Tumor--T1 Coded;Tumor--T1 Coded;Descriptive;NA
+Node;Node;Descriptive;NA
+Node-Coded;Node-Coded;Descriptive;NA
+Metastasis;Metastasis;Descriptive;NA
+Metastasis-Coded;Metastasis-Coded;Descriptive;NA
+AJCC Stage;American Joint Committee on Cancer Stage;Descriptive;NA
+Converted Stage;Converted Stage;Descriptive;NA
+Survival Data Form;Survival Data Form;Descriptive;NA
+Vital Status;Vital Status;Descriptive;NA
+Days to Date of Last Contact;Days to Date of Last Contact;Time;Days
+Days to date of Death;Days to date of Death;Time;Days
+OS event;OS event;Descriptive;NA
+OS Time;OS Time;Time;Hours
+PAM50 mRNA;PAM50 mRNA;Descriptive;NA
+SigClust Unsupervised mRNA;SigClust Unsupervised mRNA;Number;NA
+SigClust Intrinsic mRNA;SigClust Intrinsic mRNA;Number;NA
+miRNA Clusters;miRNA Clusters;Number;NA
+methylation Clusters;methylation Clusters;Number;NA
+RPPA Clusters;RPPA Clusters;Descriptive;NA
+CN Clusters;CN Clusters;Number;NA
+Integrated Clusters (with PAM50);Integrated Clusters (with PAM50);int;NA
+Integrated Clusters (no exp);Integrated Clusters (no exp);intNA
+Integrated Clusters (unsup exp);Integrated Clusters (unsup exp);int;NA
