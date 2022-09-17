@@ -6,11 +6,9 @@ author:
     address:
     - Zernikeplein 11
     - room D1.12
-    email: m.p.slik@st.hanze.nl
-abstract:the data were used to assess how the mutations in the DNA are affecting the protein expression landscape in breast cancer. Genes in our DNA are first transcribed into RNA molecules which then are translated into proteins. Changing the information content of DNA has impact on the behavior of the proteome, which is the main functional unit of cells, taking care of cell division, DNA repair, enzymatic reactions and signaling etc. They performed K-means clustering on the protein data to divide the breast cancer patients into sub-types, each having unique protein expression signature. They found that the best clustering was achieved using 3 clusters (original PAM50 gene set yields four different subtypes using RNA data).
-my question is are there different ways to categorize subtypes of breast cancer other than the PAM50 method, and define them as benign or malignant?
+    - email: m.p.slik@st.hanze.nl
 
-date: June 15th, 2022
+date: September 15th, 2022
 output:
     pdf_document:
       toc: true
@@ -54,6 +52,7 @@ Original research paper: https://www.researchgate.net/publication/303509927_Prot
 my question is are there different ways to categorize subtypes of breast cancer other than the PAM50 method, and define them as benign or malignant?
 ```{r}
 # packages
+library('pander')
 
 ```
 ```{r}
@@ -62,6 +61,8 @@ clinical_data <- read.csv(file = "Data/clinical_data_breast_cancer.csv")
 pam50_protein_data <- read.csv(file = "Data/PAM50_proteins.csv")
 
 # showing succeseful loading of data
+
+# only showing first 5 columns
 head(proteomes_data[1:5], n = 5)
 head(clinical_data, n=5)
 head(pam50_protein_data, n=5)
@@ -75,8 +76,9 @@ str(pam50_protein_data)
 ## codebook
 ```{r}
 
-codebook1 <- read.csv2("Data/77_cancer_proteomes_CPTAC_codebook.txt")
-codebook2 <- read.csv2("Data/clinical_data_breast_cancer_codebook.txt")
+cancer_proteomes_CPTAC_codebook <- read.csv2("Data/77_cancer_proteomes_CPTAC_codebook.txt")
+clinical_data_codebook <- read.csv2("Data/clinical_data_breast_cancer_codebook.txt")
+PAM50_protein_codebook <- read.csv2("Data/PAM50_protein_codebook.txt", sep = ";")
 ```
 
 Type any R code in the chunk, for example:

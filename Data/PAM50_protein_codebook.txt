@@ -1,5 +1,5 @@
 Column;Description;type;unit
-GeneSymbol;Gene abbreviation;chr;
-RefSeqProteinID;Unique reference identifier r;chr;
+GeneSymbol;Gene abbreviation;chr;NA
+RefSeqProteinID;Unique reference identifier ;chr;NA
 Species;Species;chr;latin name
 Gene.Name;Name of the gene;chr;NA
