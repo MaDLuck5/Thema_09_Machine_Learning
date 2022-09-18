@@ -54,11 +54,14 @@ Original research paper: https://www.researchgate.net/publication/303509927_Prot
 
 **Summary:** the data were used to assess how the mutations in the DNA are affecting the protein expression landscape in breast cancer. Genes in our DNA are first transcribed into RNA molecules which then are translated into proteins. Changing the information content of DNA has impact on the behavior of the proteome, which is the main functional unit of cells, taking care of cell division, DNA repair, enzymatic reactions and signaling etc. They performed K-means clustering on the protein data to divide the breast cancer patients into sub-types, each having unique protein expression signature. They found that the best clustering was achieved using 3 clusters (original PAM50 gene set yields four different subtypes using RNA data).
 my question is are there different ways to categorize subtypes of breast cancer other than the PAM50 method, and define them as benign or malignant?
-```{r}
+```{r setup}
 # packages
 library(pander)
 library(tidyr)
 library(dplyr)
+library(reticulate)
+library(here)
+library(RcppTOML)
 library(ggplot2)
 library(gridExtra)
 library(stringr)
@@ -70,6 +73,7 @@ loading of the dataframes and showing the successful loading and its dimensions.
 note only the first 5 columns of "77_cancer_proteomes_CPTAC_itraq.csv" are shown since after column 4 they are the same type.
 ```{r}
 proteomes_data <- read.csv(file = "Data//77_cancer_proteomes_CPTAC_itraq.csv")
+#py$data <- proteomes_data
 clinical_data <- read.csv(file = "Data/clinical_data_breast_cancer.csv")
 pam50_protein_data <- read.csv(file = "Data/PAM50_proteins.csv")
 
@@ -125,7 +129,15 @@ PAM50_protein_codebook
 
 there are 12553 rows in the data, these are proteins identifiable with a RefSeq ID number and have 86 columns of witch the last 83 are samples(with named with their identifiers and the last three from healthy individuals.
 to further use the data i shall reshape it to make the rows samples and each column a protein
+
+## Data cleaning and altering
+
+```{python}
+#data.rename(columns=lambda x: "TCGA-%s" % (re.split('[_|-|.]',x)[0]) if bool(re.search("TCGA",x)) is True else x,inplace=True)
+```
+
 ```{r}
+
 # first making a data frame with only the numerical data, samples start at column number 4 til the end column number 86
 proteomes_data_numerical <- proteomes_data[4:86]
 
@@ -133,7 +145,13 @@ proteomes_data_numerical <- proteomes_data[4:86]
 head(proteomes_data_numerical,n=5)
 
 ```
-## Data cleaning and altering
+
+
+### altering sample names
+
+the alteration of sample names to corospondend to the clinical data names is needed for further comparison and analyses
+
+
 
 ### Transposing
 transposing the created data frame "proteomes_data_numerical", and adding the refseq ID as column name
@@ -180,6 +198,4 @@ cat("proteomes_filtered_data[number of rows:",
     "number of columns:",
     ncol(proteomes_filtered_data),'\n')
 ```
-```{r}
-plot()
-```
+
