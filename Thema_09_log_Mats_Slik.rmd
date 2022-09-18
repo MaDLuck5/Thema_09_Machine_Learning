@@ -38,6 +38,8 @@ This data set contains published iTRAQ proteome profiling of 77 breast cancer sa
   + **Remaining columns:** log2 iTRAQ ratios for each sample (protein
   expression data, most important), three last columns are from healthy
   individuals
+
+
 * **File:** clinicaldatabreast_cancer.csv
 
   + **First column** "Complete TCGA ID" is used to match the sample IDs in the main cancer proteomes file (see example script).
@@ -139,10 +141,17 @@ transposing the created data frame "proteomes_data_numerical", and adding the re
 proteomes_data_numerical_transposed <- as.data.frame(t(proteomes_data_numerical))
 colnames(proteomes_data_numerical_transposed) <- proteomes_data$RefSeq_accession_number
 
-# checking is succesfull (only showing the first 3 columns since there are 12553 columns
+# checking is succesfull
 cat("proteomes_data_numerical_transposed[ number of rows:", nrow(proteomes_data_numerical_transposed),
     "number of columns:",ncol(proteomes_data_numerical_transposed),'\n')
-head(proteomes_data_numerical_transposed[,1:3], 10)
+
+
+# lets add a healthy group and cancer, the last 3 columns where from healtyh poeple
+# *see content section for the reference
+proteomes_data_numerical_transposed$sample_type <- "Cancer"
+proteomes_data_numerical_transposed$sample_type[81:83] <- "Healthy"
+
+
 ```
 ### cleaning
 
@@ -152,5 +161,25 @@ count_na_func <- function(x) sum(is.na(x))
 # getting NA values per RefSeqID(column)
 Na_per_col <- sapply(proteomes_data_numerical_transposed,count_na_func)
 
-hist(Na_per_col, breaks = 40, xlab = "Number of NA in column", ylab = "Frequency", main = "Frequency of number of NA values per RefSeqID", col = "green")
+hist(Na_per_col, breaks = 40,
+     xlab = "Number of NA in column",
+     ylab = "Frequency",
+     main = "Frequency of number of NA values per RefSeqID",
+     col = "green")
+```
+```{r}
+cat("number of proteins with NA values in them:", sum(Na_per_col > 0), '\n' )
+
+# TODO  decide how many NA values are permitted per protein
+proteomes_filtered_data <- proteomes_data_numerical_transposed[Na_per_col < 8]
+cat("number of proteins with 8 or more NA values in them and deleted from data:",
+    sum(Na_per_col > 8), '\n')
+
+cat("proteomes_filtered_data[number of rows:",
+    nrow(proteomes_filtered_data),
+    "number of columns:",
+    ncol(proteomes_filtered_data),'\n')
+```
+```{r}
+plot()
 ```
