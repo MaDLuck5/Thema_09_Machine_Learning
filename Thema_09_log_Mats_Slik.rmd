@@ -131,13 +131,26 @@ proteomes_data_numerical <- proteomes_data[4:86]
 head(proteomes_data_numerical,n=5)
 
 ```
+## Data cleaning and altering
+
+### Transposing
 transposing the created data frame "proteomes_data_numerical", and adding the refseq ID as column name
 ```{r}
-proteomes_data_numerical_transposed <- t(proteomes_data_numerical)
+proteomes_data_numerical_transposed <- as.data.frame(t(proteomes_data_numerical))
 colnames(proteomes_data_numerical_transposed) <- proteomes_data$RefSeq_accession_number
 
 # checking is succesfull (only showing the first 3 columns since there are 12553 columns
-cat("proteomes_data_numerical_transposed[ number of rows:", nrow(proteomes_data_numerical_transposed), "number of columns:",ncol(proteomes_data_numerical_transposed),'\n')
+cat("proteomes_data_numerical_transposed[ number of rows:", nrow(proteomes_data_numerical_transposed),
+    "number of columns:",ncol(proteomes_data_numerical_transposed),'\n')
 head(proteomes_data_numerical_transposed[,1:3], 10)
 ```
+### cleaning
 
+since there are NA values in the data lets see how much
+```{r}
+count_na_func <- function(x) sum(is.na(x))
+# getting NA values per RefSeqID(column)
+Na_per_col <- sapply(proteomes_data_numerical_transposed,count_na_func)
+
+hist(Na_per_col, breaks = 40, xlab = "Number of NA in column", ylab = "Frequency", main = "Frequency of number of NA values per RefSeqID", col = "green")
+```
