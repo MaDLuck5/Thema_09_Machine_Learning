@@ -1,31 +1,31 @@
-Column;Description;type;unit
-Complete_TCGA_ID;TCGA ID;Name;NA
-Gender;Gender;Name;NA
-Age_at_Initial_Pathologic_Diagnosis;Age at Initial Pathologic Diagnosis;Descriptive;NA
-ER Status;Estrogen receptor Status;Descriptive;NA
-PR Status;Progesterone receptor Status;Descriptive;NA
-HER2 Final Status;Human Epidermal growth factor Receptor 2;Descriptive;NA
-Tumor;Tumor;Descriptive;NA
-Tumor--T1 Coded;Tumor--T1 Coded;Descriptive;NA
-Node;Node;Descriptive;NA
-Node-Coded;Node-Coded;Descriptive;NA
-Metastasis;Metastasis;Descriptive;NA
-Metastasis-Coded;Metastasis-Coded;Descriptive;NA
-AJCC Stage;American Joint Committee on Cancer Stage;Descriptive;NA
-Converted Stage;Converted Stage;Descriptive;NA
-Survival Data Form;Survival Data Form;Descriptive;NA
-Vital Status;Vital Status;Descriptive;NA
-Days to Date of Last Contact;Days to Date of Last Contact;Time;Days
-Days to date of Death;Days to date of Death;Time;Days
-OS event;OS event;Descriptive;NA
-OS Time;OS Time;Time;Hours
-PAM50 mRNA;PAM50 mRNA;Descriptive;NA
-SigClust Unsupervised mRNA;SigClust Unsupervised mRNA;Number;NA
-SigClust Intrinsic mRNA;SigClust Intrinsic mRNA;Number;NA
-miRNA Clusters;miRNA Clusters;Number;NA
-methylation Clusters;methylation Clusters;Number;NA
-RPPA Clusters;RPPA Clusters;Descriptive;NA
-CN Clusters;CN Clusters;Number;NA
-Integrated Clusters (with PAM50);Integrated Clusters (with PAM50);int;NA
-Integrated Clusters (no exp);Integrated Clusters (no exp);intNA
-Integrated Clusters (unsup exp);Integrated Clusters (unsup exp);int;NA
+Column;Description;type;data type;unit
+Complete_TCGA_ID;TCGA ID;name;chr;NA
+Gender;Gender;name;chr;NA
+Age_at_Initial_Pathologic_Diagnosis;Age at Initial Pathologic Diagnosis;Descriptive;chr;NA
+ER Status;Estrogen receptor Status;Descriptive;chr;NA
+PR Status;Progesterone receptor Status;Descriptive;chr;NA
+HER2 Final Status;Human Epidermal growth factor Receptor 2;Descriptive;chr;NA
+Tumor;Tumor;Descriptive;chr;NA
+Tumor--T1 Coded;Tumor--T1 Coded;Descriptive;chr;NA
+Node;Node;Descriptive;chr;NA
+Node-Coded;Node-Coded;Descriptive;chr;NA
+Metastasis;Metastasis;Descriptive;chr;NA
+Metastasis-Coded;Metastasis-Coded;Descriptive;chr;NA
+AJCC Stage;American Joint Committee on Cancer Stage;Descriptive;chr;NA
+Converted Stage;Converted Stage;Descriptive;chr;NA
+Survival Data Form;Survival Data Form;Descriptive;chr;NA
+Vital Status;Vital Status;Descriptive;chr;NA
+Days to Date of Last Contact;Days to Date of Last Contact;Time;int;Days
+Days to date of Death;Days to date of Death;Time;int;Days
+OS event;OS event 0= NO, 1= YES;Descriptive;int;NA
+OS Time;OS Time;Time;int;Hours
+PAM50 mRNA;PAM50 mRNA;Descriptive;chr;NA
+SigClust Unsupervised mRNA;SigClust Unsupervised mRNA;Count;int;NA
+SigClust Intrinsic mRNA;SigClust Intrinsic mRNA;Count;int;NA
+miRNA Clusters;miRNA Clusters;Count;int;NA
+methylation Clusters;methylation Clusters;Count;int;NA
+RPPA Clusters;RPPA Clusters;Descriptive;chr;NA
+CN Clusters;CN Clusters;Count;int;NA
+Integrated Clusters (with PAM50);Integrated Clusters (with PAM50);count;int;NA
+Integrated Clusters (no exp);Integrated Clusters (no exp);count;int;NA
+Integrated Clusters (unsup exp);Integrated Clusters (unsup exp);count;int;NA

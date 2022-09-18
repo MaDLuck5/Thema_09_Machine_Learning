@@ -1,5 +1,5 @@
-Column;Description;type;unit
-RefSeq_accession_number;RefSeq protein ID (each protein has a unique ID in a RefSeq database);string;NA
-gene_symbol;symbol of the gene;string;NA
+Column;Description;data.type;unit
+RefSeq_accession_number;RefSeq protein ID;string;NA
+gene_symbol;Gene abbreviation code;string;NA
 gene_name;Name of the gene;string;NA
-Remaining columns;log2 iTRAQ ratios for each sample (protein expression data, most impor-tant), three last columns are from healthy individuals;float:log2fold
+Remaining columns;log2 iTRAQ ratios;float
