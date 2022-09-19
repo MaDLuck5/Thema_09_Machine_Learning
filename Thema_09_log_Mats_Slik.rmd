@@ -211,4 +211,7 @@ cat("proteomes_filtered_data[number of rows:",
     "number of columns:",
     ncol(proteomes_filtered_data),'\n')
 ```
-
+```{r}
+clinical_data$Vital.Status <- factor(clinical_data$Vital.Status)
+summary(clinical_data$Vital.Status)
+```
