@@ -73,6 +73,7 @@ loading of the dataframes and showing the successful loading and its dimensions.
 note only the first 5 columns of "77_cancer_proteomes_CPTAC_itraq.csv" are shown since after column 4 they are the same type.
 ```{r}
 proteomes_data <- read.csv(file = "Data//77_cancer_proteomes_CPTAC_itraq.csv")
+proteomes_data2 <- read.csv(file = "Data//77_cancer_proteomes_CPTAC_itraq_test1.csv")
 #py$data <- proteomes_data
 clinical_data <- read.csv(file = "Data/clinical_data_breast_cancer.csv")
 pam50_protein_data <- read.csv(file = "Data/PAM50_proteins.csv")
@@ -132,25 +133,38 @@ to further use the data i shall reshape it to make the rows samples and each col
 
 ## Data cleaning and altering
 
-```{python}
-#data.rename(columns=lambda x: "TCGA-%s" % (re.split('[_|-|.]',x)[0]) if bool(re.search("TCGA",x)) is True else x,inplace=True)
-```
-
-```{r}
-
-# first making a data frame with only the numerical data, samples start at column number 4 til the end column number 86
-proteomes_data_numerical <- proteomes_data[4:86]
-
-# checking data
-head(proteomes_data_numerical,n=5)
-
-```
-
-
 ### altering sample names
 
-the alteration of sample names to corospondend to the clinical data names is needed for further comparison and analyses
+the alteration of sample names to corespondent to the clinical data names is needed for further comparison and analyses.
+this is done by changing the column names to that of the same format of the clinical data.
+this is done with some regex magic
+```{r}
+# storing a list of the column names
+column_names <- names(proteomes_data)
 
+# function
+ch_sp_name <- function (x){
+  #search for TCGA name,if found split and make new name
+    if(grepl("TCGA",x) == TRUE){
+      temp_list <- as.list(strsplit(x, '[_|-|.]')[[1]])
+      x <- str_c(c('TCGA',temp_list[[1]],temp_list[[2]]),collapse = '-')
+    }
+return (x)
+}
+
+# changing of the colnames
+colnames(proteomes_data) <- lapply(column_names, ch_sp_name)
+cat("Old name:",column_names[[4]],",New name:",names(proteomes_data)[[4]])
+
+```
+this output show to conversion has been succesfull
+
+### numerical data frame
+now  we need to make a data frame with only the numerical data for the ease of analyzes
+```{r}
+# first making a data frame with only the numerical data, samples start at column number 4 til the end column number 86
+proteomes_data_numerical <- proteomes_data[4:86]
+```
 
 
 ### Transposing
@@ -168,7 +182,6 @@ cat("proteomes_data_numerical_transposed[ number of rows:", nrow(proteomes_data_
 # *see content section for the reference
 proteomes_data_numerical_transposed$sample_type <- "Cancer"
 proteomes_data_numerical_transposed$sample_type[81:83] <- "Healthy"
-
 
 ```
 ### cleaning
