@@ -1,7 +1,7 @@
 Column;Description;type;data type;unit
 Complete_TCGA_ID;TCGA ID;name;chr;NA
 Gender;Gender;name;chr;NA
-Age_at_Initial_Pathologic_Diagnosis;Age at Initial Pathologic Diagnosis;Descriptive;chr;NA
+Age_at_Initial_Pathologic_Diagnosis;Age at Initial Pathologic Diagnosis;Descriptive;int;Years
 ER Status;Estrogen receptor Status;Descriptive;chr;NA
 PR Status;Progesterone receptor Status;Descriptive;chr;NA
 HER2 Final Status;Human Epidermal growth factor Receptor 2;Descriptive;chr;NA
@@ -26,6 +26,6 @@ miRNA Clusters;miRNA Clusters;Count;int;NA
 methylation Clusters;methylation Clusters;Count;int;NA
 RPPA Clusters;RPPA Clusters;Descriptive;chr;NA
 CN Clusters;CN Clusters;Count;int;NA
-Integrated Clusters (with PAM50);Integrated Clusters (with PAM50);count;int;NA
-Integrated Clusters (no exp);Integrated Clusters (no exp);count;int;NA
-Integrated Clusters (unsup exp);Integrated Clusters (unsup exp);count;int;NA
+Integrated Clusters (with PAM50);Integrated Clusters (with PAM50);Count;int;NA
+Integrated Clusters (no exp);Integrated Clusters (no exp);Count;int;NA
+Integrated Clusters (unsup exp);Integrated Clusters (unsup exp);Count;int;NA
