@@ -53,8 +53,7 @@ This data set contains published iTRAQ proteome profiling of 77 breast cancer sa
 Original research paper: https://www.researchgate.net/publication/303509927_Proteogenomics_connects_somatic_mutations_to_signaling_in_breast_cancer
 
 **Summary:** the data were used to assess how the mutations in the DNA are affecting the protein expression landscape in breast cancer. Genes in our DNA are first transcribed into RNA molecules which then are translated into proteins. Changing the information content of DNA has impact on the behavior of the proteome, which is the main functional unit of cells, taking care of cell division, DNA repair, enzymatic reactions and signaling etc. They performed K-means clustering on the protein data to divide the breast cancer patients into sub-types, each having unique protein expression signature. They found that the best clustering was achieved using 3 clusters (original PAM50 gene set yields four different subtypes using RNA data).
-my question is: are there different ways to categorize subtypes of breast cancer other than the PAM50 method with machine learning.
-
+Are there different ways to categorize breast cancer based on protein expression data, with machine learning being used to classify them as benign or maligned, other than the pam50 proteins?
 
 ```{r setup, include = 0}
 # packages
