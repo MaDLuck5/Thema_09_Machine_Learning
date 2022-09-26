@@ -65,6 +65,7 @@ library(gridExtra)
 library(stringr)
 library(hrbrthemes)
 library(viridis)
+library(DelayedMatrixStats)
 
 ```
 ## Exploratory Data Analysis
@@ -262,8 +263,10 @@ merged_data$AJCC.Stage <- factor(merged_data$AJCC.Stage)
 
 ```
 ```{r}
-
+str(merged_data)
 ```
 ```{r}
-write.csv(merged_data, "Data\\export_data.csv", row.names = TRUE)
+
+library(RWeka)
+write.arff(merged_data, file = "Data//merged_data.arff")
 ```
