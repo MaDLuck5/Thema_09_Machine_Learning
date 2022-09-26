@@ -240,7 +240,7 @@ clinical_data <- clinical_data[,-1]
 
 # mergin the two data frames according to the row names (TCGA Identification number),
 merged_data <- merge(select(clinical_data, Tumor, Tumor..T1.Coded, AJCC.Stage, Vital.Status), protein_exp__numerical_transposed, by = 0)
-
+cleaned_merge_data <- merge(select(clinical_data, Tumor, Tumor..T1.Coded, AJCC.Stage, Vital.Status), proteomes_filtered_data, by = 0)
 cat("merged_data of rows:", nrow(merged_data),
     "number of columns:",ncol(merged_data),'\n')
 
@@ -260,21 +260,43 @@ boxplot(merged_data[6:76],
 Since i cant be sure of the significante of every protein i cant simple trow away any sample
 
 to fix this i shall get the standard deviation from every protein to prepare for a selection of the most deviant ones.
+and for illustration i will overlay the dataframe which has been filtered from most NA values
 
 ```{r}
 fg <- colSds(as.matrix(merged_data[sapply(merged_data, is.numeric)]), na.rm = TRUE)
+fg2 <- colSds(as.matrix(cleaned_merge_data[sapply(cleaned_merge_data, is.numeric)]), na.rm = TRUE)
+
+
 fg <- as.data.frame(fg, row.names = colnames(merged_data[6:ncol(merged_data)]))
+fg2 <- as.data.frame(fg2, row.names = colnames(cleaned_merge_data[6:ncol(cleaned_merge_data)]))
+
 fg$count <- seq(from = 1, to = nrow(fg))
-ggplot(data=fg, aes(x=count, fg)) +
-  geom_point(color="#69b3a2", size=0.002) +
-  xlab("Data Frame row number") +
-  ylab("Standard deviation for Protein expression") +
-  ggtitle("density plot for standard deviation of protein expression")
+
+merged_fg <- merge(fg,fg2,all.x = TRUE, by = 0)
+merged_fg <- merged_fg[order(merged_fg$count),]
+
+# assigning 0 to every NA values in fg2 since that is the filterd one
+merged_fg$fg2[is.na(merged_fg$fg2)] <- 0
+
+# plotting
+colors <- c("Non Na filtered" = "#ff00a1", "Na filtered" = "#00ff5e")
+
+ggplot(data=merged_fg) +
+  geom_point(size=0.0015, aes(x=count,  y=fg, color="Non Na filtered")) +
+  geom_point(size=0.0015, aes(x=count,y=fg2,  color="Na filtered")) +
+  labs(x = "Data Frame row number",
+         y = "Standard deviation",
+         color = "Legend") +
+  ggtitle("density plot for standard deviation of protein expression") +
+  theme(legend.position = "bottom")
+
+
 
 
 
 
 ```
+as we can see in the standard deviation compared from proteins with a lot of samples with NA in them to the filtered data, we see that the proteins with allot of NA in them seem to be having a higher Standard deviation, but still ther should be enough deviation in the filtered Data.
 ```{r}
 # assigning as factors
 merged_data$Tumor <- factor(merged_data$Tumor)
