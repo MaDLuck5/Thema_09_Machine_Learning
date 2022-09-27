@@ -202,14 +202,14 @@ Na_per_col <- sapply(protein_exp__numerical_transposed, count_na_func)
 
 ggplot() +
   aes(Na_per_col) +
-  geom_histogram(color = "black", fill = "red") +
+  geom_histogram(color = "black", fill = "#F9C000") +
   xlab("Number of NA") +
   ylab("Frequency of columns") +
   ggtitle("Frequency of number of NA values per RefSeqID")
 
 ggplot() +
   aes(Na_per_col[Na_per_col > 0]) +
-  geom_histogram(color = "black", fill = "red") +
+  geom_histogram(color = "black", fill = "#0039F9") +
   xlab("Number of NA") +
   ylab("Frequency of columns") +
   ggtitle("Frequency of number of NA values per RefSeqID with 0 omitted")
@@ -263,7 +263,7 @@ boxplot(merged_data[6:76],
                            main = "distribution of Protein expression for first 70 Proteins",
                            show.names= FALSE)
 ```
-Since i cant be sure of the significante of every protein i cant simple trow away any sample
+Since i can't be sure of the significante of every protein i cant simple trow away any sample
 
 to fix this i shall get the standard deviation from every protein to prepare for a selection of the most deviant ones.
 and for illustration i will overlay the dataframe which has been filtered from most NA values
@@ -285,9 +285,10 @@ merged_fg <- merged_fg[order(merged_fg$count),]
 merged_fg$fg2[is.na(merged_fg$fg2)] <- 0
 
 # plotting
-colors <- c("Non Na filtered" = "#ff00a1", "Na filtered" = "#00ff5e")
+colors <- c("Non Na filtered" = "#F9C000", "Na filtered" = "#0039F9")
 
 ggplot(data=merged_fg) +
+  
   geom_point(size=0.0015, aes(x=count,  y=fg, color="Non Na filtered")) +
   geom_point(size=0.0015, aes(x=count,y=fg2,  color="Na filtered")) +
   labs(x = "Data Frame row number",
