@@ -200,17 +200,21 @@ count_na_func <- function(x) sum(is.na(x))
 # getting NA values per RefSeqID(column)
 Na_per_col <- sapply(protein_exp__numerical_transposed, count_na_func)
 
-hist(Na_per_col, breaks = 40,
-     xlab = "Number of NA",
-     ylab = "Frequency of columns",
-     main = "Frequency of number of NA values per RefSeqID",
-     col = "green")
+ggplot() +
+  aes(Na_per_col) +
+  geom_histogram(color = "black", fill = "red") +
+  xlab("Number of NA") +
+  ylab("Frequency of columns") +
+  ggtitle("Frequency of number of NA values per RefSeqID")
 
-hist(which(Na_per_col>0), breaks = 40,
-     xlab = "Number of NA",
-     ylab = "Frequency of columns",
-     main = "Frequency of number of NA values per RefSeqID with 0 omitted",
-     col = "green")
+ggplot() +
+  aes(Na_per_col[Na_per_col > 0]) +
+  geom_histogram(color = "black", fill = "red") +
+  xlab("Number of NA") +
+  ylab("Frequency of columns") +
+  ggtitle("Frequency of number of NA values per RefSeqID with 0 omitted")
+
+
 ```
 there are allot of proteins with more then 10% of there samples with missing data, so i shall be removing.
 ```{r}
