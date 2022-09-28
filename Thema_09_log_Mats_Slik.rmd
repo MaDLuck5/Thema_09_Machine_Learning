@@ -288,7 +288,7 @@ merged_fg$fg2[is.na(merged_fg$fg2)] <- 0
 colors <- c("Non Na filtered" = "#F9C000", "Na filtered" = "#0039F9")
 
 ggplot(data=merged_fg) +
-  
+
   geom_point(size=0.0015, aes(x=count,  y=fg, color="Non Na filtered")) +
   geom_point(size=0.0015, aes(x=count,y=fg2,  color="Na filtered")) +
   labs(x = "Data Frame row number",
@@ -310,10 +310,15 @@ merged_data$Tumor <- factor(merged_data$Tumor)
 merged_data$Vital.Status <- factor(merged_data$Vital.Status)
 merged_data$AJCC.Stage <- factor(merged_data$AJCC.Stage)
 
+cleaned_merge_data$Tumor <- factor(cleaned_merge_data$Tumor)
+cleaned_merge_data$Vital.Status <- factor(cleaned_merge_data$Vital.Status)
+cleaned_merge_data$AJCC.Stage <- factor(cleaned_merge_data$AJCC.Stage)
+
 ```
 
 ```{r}
 
 
 write.arff(merged_data, file = "Data//merged_data.arff")
+write.arff(cleaned_merge_data, file = "Data//cleaned_merge_data.arff")
 ```
