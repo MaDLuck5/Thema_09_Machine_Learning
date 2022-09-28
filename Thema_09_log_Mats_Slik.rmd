@@ -1,8 +1,6 @@
 ---
 title: "Introduction into machine learning and analyzes of Breast Cancer Proteomes"
 author: "Mats Slik"
-affiliation: "Hanze University of Applied Sciences"
-address: "Zernikeplein 11, room D1.12"
 email: "m.p.slik@st.hanze.nl"
 
 date: "October 28th, 2022"
