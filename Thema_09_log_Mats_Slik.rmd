@@ -4,10 +4,17 @@ author: "Mats Slik"
 email: "m.p.slik@st.hanze.nl"
 
 date: "October 28th, 2022"
+header-includes:
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- \fancyfoot[RO,RE]{And this is a fancy footer}
+- \fancyfoot[CE,CO]{\thepage}
+
 output:
     pdf_document:
       toc: true
       toc_depth: 2
+
 ---
 
 
@@ -71,10 +78,10 @@ library(MatrixGenerics)
 loading of the dataframes and showing the successful loading and its dimensions.
 note only the first 5 columns of "77_cancer_proteomes_CPTAC_itraq.csv" are shown since after column 4 they are the same type.
 ```{r}
-protein_exp_data <- read.csv(file = "Data//77_cancer_proteomes_CPTAC_itraq.csv")
+protein_exp_data <- read.csv(file = "data//77_cancer_proteomes_CPTAC_itraq.csv")
 
-clinical_data <- read.csv(file = "Data/clinical_data_breast_cancer.csv")
-pam50_protein_data <- read.csv(file = "Data/PAM50_proteins.csv")
+clinical_data <- read.csv(file = "data/clinical_data_breast_cancer.csv")
+pam50_protein_data <- read.csv(file = "data/PAM50_proteins.csv")
 
 # showing succeseful loading of data
 
@@ -314,6 +321,6 @@ cleaned_merge_data$AJCC.Stage <- factor(cleaned_merge_data$AJCC.Stage)
 ```{r}
 
 
-write.arff(merged_data, file = "Data//merged_data.arff")
-write.arff(cleaned_merge_data, file = "Data//cleaned_merge_data.arff")
+write.arff(merged_data, file = "data//merged_data.arff")
+write.arff(cleaned_merge_data, file = "data//cleaned_merge_data.arff")
 ```

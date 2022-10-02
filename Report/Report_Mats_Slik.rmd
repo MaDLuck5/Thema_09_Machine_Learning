@@ -1,0 +1,39 @@
+---
+title: "Introduction into machine learning and analyzes of Breast Cancer Proteomes"
+author: "Mats Slik"
+email: "m.p.slik@st.hanze.nl"
+
+date: "October 28th, 2022"
+header-includes:
+- \usepackage{fancyhdr}
+- \pagestyle{fancy}
+- - \setlength{\footskip}{12.0pt} # set the footer size
+- \fancyfoot[RO,RE]{Mats Slik (344216)\\
+    Bioinformatics - BFV3\\
+    Institute of Life Sciences \& Technology\\
+    Hanze University of Applied Sciences\\
+    Dave Langers\\
+    Bart Barnard\\}
+- \fancyfoot[CE,CO]{\thepage}
+
+output:
+    pdf_document:
+      toc: true
+      toc_depth: 2
+
+---
+
+
+# Preface
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+# Abstract
+# Abbreviations
+# Contents
+# introduction
+# Methods
+# Results
+# Conclusion
+# Discussion
+# References
