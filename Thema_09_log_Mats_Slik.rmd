@@ -1,5 +1,5 @@
 ---
-title: "Introduction into machine learning and analyses of Breast Cancer Proteomes"
+title: "Introduction into machine learning and analysis of Breast Cancer Proteomes"
 author: "Mats Slik"
 email: "m.p.slik@st.hanze.nl"
 
@@ -7,13 +7,20 @@ date: "October 28th, 2022"
 header-includes:
 - \usepackage{fancyhdr}
 - \pagestyle{fancy}
-- \fancyfoot[RO,RE]{And this is a fancy footer}
+- - \setlength{\footskip}{12.0pt} # set the footer size
+- \fancyfoot[RO,RE]{Mats Slik (344216)\\
+    Bioinformatics - BFV3\\
+    Institute of Life Sciences \& Technology\\
+    Hanze University of Applied Sciences\\
+    Dave Langers\\
+    Bart Barnard\\}
 - \fancyfoot[CE,CO]{\thepage}
-
+numbersections: TRUE
 output:
     pdf_document:
       toc: true
       toc_depth: 2
+
 
 ---
 
@@ -77,7 +84,7 @@ library(MatrixGenerics)
 
 loading of the dataframes and showing the successful loading and its dimensions.
 note only the first 5 columns of "77_cancer_proteomes_CPTAC_itraq.csv" are shown since after column 4 they are the same type.
-```{r}
+```{r data loading}
 protein_exp_data <- read.csv(file = "data//77_cancer_proteomes_CPTAC_itraq.csv")
 
 clinical_data <- read.csv(file = "data/clinical_data_breast_cancer.csv")
@@ -100,19 +107,19 @@ Everything seems to be loaded completely, but we shall look further if everythin
 
 
 Now checking if the protein expression data has been correctly read.
-```{r}
+```{r Protein expression dataframe exploration}
 str(protein_exp_data)
 ```
 Nothing strange about the Proteomes dat everything seems to be read correct.
 
 Checking if the clinical data  has been correctly read.
-```{r}
+```{r clinical dataframe exploration}
 str(clinical_data)
 ```
 Nothing strange about the clinical data everything seems to be read correct.
 
 Checking if the pam50 protein data  has been correctly read.
-```{r}
+```{r pam 50 dataframe exploration}
 str(pam50_protein_data)
 ```
 Nothing strange about the pam50 protein data everything seems to be read correct.
@@ -122,7 +129,7 @@ Nothing strange about the pam50 protein data everything seems to be read correct
 
 loading of the created codebooks for the three dataframes.
 showing also its contents and successful loading
-```{r}
+```{r code book visualisation}
 
 cancer_proteomes_CPTAC_codebook <- read.csv2("Data/77_cancer_proteomes_CPTAC_codebook.txt")
 clinical_data_codebook <- read.csv2("Data/clinical_data_breast_cancer_codebook.txt")
@@ -147,7 +154,7 @@ to further use the data I shall reshape it to make the rows samples and each col
 the alteration of sample names to corespondent to the clinical data names is needed for further comparison and analyses.
 this is done by changing the column names to that of the same format of the clinical data.
 this is done with some regex magic.
-```{r}
+```{r sample name altering}
 # storing a list of the column names
 column_names <- names(protein_exp_data)
 
@@ -170,7 +177,7 @@ this output show to conversion has been successful
 
 ### numerical data frame
 now  we need to make a data frame with only the numerical data for the ease of analyzes
-```{r}
+```{r numerical dataframe}
 # first making a data frame with only the numerical data, samples start at column number 4 til the end column number 86
 protein_exp_numerical <- protein_exp_data[4:86]
 ```
@@ -178,7 +185,7 @@ protein_exp_numerical <- protein_exp_data[4:86]
 
 ### Transposing
 transposing the created data frame "protein_exp_numerical", and adding the refseq ID as column name
-```{r}
+```{r Data transposing}
 
 # transposing of the old dataframe to a new one
 protein_exp__numerical_transposed <- as.data.frame(t(protein_exp_numerical))
@@ -197,30 +204,34 @@ as we can see the row and column dimensions have been flipped
 ### cleaning
 
 since there are NA values in the data lets see how much
-```{r}
+```{r cleaning step for NA}
 count_na_func <- function(x) sum(is.na(x))
 # getting NA values per RefSeqID(column)
 Na_per_col <- sapply(protein_exp__numerical_transposed, count_na_func)
+```
+```{r plot making1, fig.cap = "barplot with the frequency of columns with more than 0 NA in them", out.width = "90%"}
 
 ggplot() +
   aes(Na_per_col) +
   geom_histogram(color = "black", fill = "#F9C000") +
   xlab("Number of NA") +
   ylab("Frequency of columns") +
-  ggtitle("Figure 1: Frequency of number of NA values per RefSeqID") +
+  ggtitle("Frequency of number of NA values per RefSeqID")
 
+```
+```{r plot making2 , fig.cap = "barplot with the frequency of columns with more than 0 NA in them", out.width = "90%"}
 ggplot() +
   aes(Na_per_col[Na_per_col > 0]) +
   geom_histogram(color = "black", fill = "#0039F9") +
   xlab("Number of NA") +
   ylab("Frequency of columns") +
-  ggtitle("Figure 2:Frequency of number of NA values per RefSeqID with 0 omitted") +
-  geom_label()
+  ggtitle("Frequency of number of NA values per RefSeqID with 0 omitted")
+
 
 
 ```
-there are allot of proteins with more then 10% of there samples with missing data, so i shall be removing.
-```{r}
+there are a lot of proteins with more than 10% of their samples with missing data, so i shall be removing.
+```{r finishing NA cleaning}
 cat("number of proteins with NA values in them:", sum(Na_per_col > 0), '\n' )
 
 # deleting every protein with more than 10% NA values in them, since this is allot
@@ -233,13 +244,13 @@ cat("proteomes_filtered_data[number of rows:",
     "number of columns:",
     ncol(proteomes_filtered_data),'\n')
 ```
-as we can see from te reports generated by the code we can see that the filtereing of NA was succesfull.
-and we now have a data set that contains data with lesse than 10% per protein of NA values
+as we can see from te reports generated by the code we can see that the filtering of NA was successful.
+and we now have a data set that contains data with less than 10% per protein of NA values
 
 ### Merging clinical and protein expression dataframes
 
 to be able to use the Clinical dat we need to merge it to its corresponding row and sample in the Protein expressions
-```{r}
+```{r data merging}
 # firs assigning row names to clinical data
 rownames(clinical_data) <- clinical_data$Complete.TCGA.ID
 
@@ -258,20 +269,21 @@ we can see that not every sample had an entry in the clinical data, so we end up
 ## Data visualisation
 
 Showing some examples of distributions of protein expression data since there are around 12 000 proteins found
-```{r}
+```{r plot making3, fig.cap = "boxplot of protein expression distribution, first 70 proteins", out.width = "90%"}
 boxplot(merged_data[6:76],
         col = rainbow(ncol(merged_data[6:76])),
                            xlab = "Protein",
                            ylab = "log2 iTRAQ ratio",
-                           main = "Figure 3:distribution of Protein expression for first 70 Proteins",
+                           main = "distribution of Protein expression for first 70 Proteins",
                            show.names= FALSE)
 ```
+
 Since i can't be sure of the significante of every protein i cant simple trow away any sample
 
 to fix this i shall get the standard deviation from every protein to prepare for a selection of the most deviant ones.
 and for illustration i will overlay the dataframe which has been filtered from most NA values
 
-```{r}
+```{r plot making4, fig.cap = "scatterplot of standard deviation for the protein expresion dataand for the NA filterd version", out.width = "90%"}
 fg <- colSds(as.matrix(merged_data[sapply(merged_data, is.numeric)]), na.rm = TRUE)
 fg2 <- colSds(as.matrix(cleaned_merge_data[sapply(cleaned_merge_data, is.numeric)]), na.rm = TRUE)
 
@@ -288,26 +300,20 @@ merged_fg <- merged_fg[order(merged_fg$count),]
 merged_fg$fg2[is.na(merged_fg$fg2)] <- 0
 
 # plotting
-colors <- c("Non Na filtered" = "#F9C000", "Na filtered" = "#0039F9")
-
 ggplot(data=merged_fg) +
-
   geom_point(size=0.0015, aes(x=count,  y=fg, color="Non Na filtered")) +
   geom_point(size=0.0015, aes(x=count,y=fg2,  color="Na filtered")) +
   labs(x = "Data Frame row number",
          y = "Standard deviation",
          color = "Legend") +
-  ggtitle("Figure 4: density plot for standard deviation of protein expression") +
+  ggtitle("Density plot for standard deviation of protein expression") +
   theme(legend.position = "bottom")
 
-
-
-
-
-
 ```
+
+
 as we can see in the standard deviation compared from proteins with a lot of samples with NA in them to the filtered data, we see that the proteins with allot of NA in them seem to be having a higher Standard deviation, but still ther should be enough deviation in the filtered Data.
-```{r}
+```{r Assigning factors}
 # assigning as factors
 merged_data$Tumor <- factor(merged_data$Tumor)
 merged_data$Vital.Status <- factor(merged_data$Vital.Status)
@@ -319,7 +325,7 @@ cleaned_merge_data$AJCC.Stage <- factor(cleaned_merge_data$AJCC.Stage)
 
 ```
 
-```{r}
+```{r Data exportation}
 
 
 write.arff(merged_data, file = "data//merged_data.arff")

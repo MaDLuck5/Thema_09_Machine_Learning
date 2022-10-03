@@ -1,5 +1,5 @@
 ---
-title: "Introduction into machine learning and analyses of Breast Cancer Proteomes"
+title: "Introduction into machine learning and analysis of Breast Cancer Proteomes"
 author: "Mats Slik"
 email: "m.p.slik@st.hanze.nl"
 
