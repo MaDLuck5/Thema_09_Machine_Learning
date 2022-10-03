@@ -3,8 +3,6 @@ title: "Introduction into machine learning and analysis of Breast Cancer Proteom
 author: "Mats Slik"
 email: "m.p.slik@st.hanze.nl"
 
-date: "October 28th, 2022"
-
 output: pdf_document
 
 ---
