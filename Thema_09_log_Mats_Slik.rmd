@@ -1,5 +1,5 @@
 ---
-title: "Introduction into machine learning and analyzes of Breast Cancer Proteomes"
+title: "Introduction into machine learning and analyses of Breast Cancer Proteomes"
 author: "Mats Slik"
 email: "m.p.slik@st.hanze.nl"
 
@@ -207,14 +207,15 @@ ggplot() +
   geom_histogram(color = "black", fill = "#F9C000") +
   xlab("Number of NA") +
   ylab("Frequency of columns") +
-  ggtitle("Frequency of number of NA values per RefSeqID")
+  ggtitle("Figure 1: Frequency of number of NA values per RefSeqID") +
 
 ggplot() +
   aes(Na_per_col[Na_per_col > 0]) +
   geom_histogram(color = "black", fill = "#0039F9") +
   xlab("Number of NA") +
   ylab("Frequency of columns") +
-  ggtitle("Frequency of number of NA values per RefSeqID with 0 omitted")
+  ggtitle("Figure 2:Frequency of number of NA values per RefSeqID with 0 omitted") +
+  geom_label()
 
 
 ```
@@ -262,7 +263,7 @@ boxplot(merged_data[6:76],
         col = rainbow(ncol(merged_data[6:76])),
                            xlab = "Protein",
                            ylab = "log2 iTRAQ ratio",
-                           main = "distribution of Protein expression for first 70 Proteins",
+                           main = "Figure 3:distribution of Protein expression for first 70 Proteins",
                            show.names= FALSE)
 ```
 Since i can't be sure of the significante of every protein i cant simple trow away any sample
@@ -296,7 +297,7 @@ ggplot(data=merged_fg) +
   labs(x = "Data Frame row number",
          y = "Standard deviation",
          color = "Legend") +
-  ggtitle("density plot for standard deviation of protein expression") +
+  ggtitle("Figure 4: density plot for standard deviation of protein expression") +
   theme(legend.position = "bottom")
 
 
