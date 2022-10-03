@@ -1,39 +1,39 @@
 ---
-title: "Introduction into machine learning and analysis of Breast Cancer Proteomes"
 author: "Mats Slik"
 email: "m.p.slik@st.hanze.nl"
-
-date: "October 28th, 2022"
-header-includes:
-- \usepackage{fancyhdr}
-- \pagestyle{fancy}
-- - \setlength{\footskip}{12.0pt} # set the footer size
-- \fancyfoot[RO,RE]{Mats Slik (344216)\\
-    Bioinformatics - BFV3\\
-    Institute of Life Sciences \& Technology\\
-    Hanze University of Applied Sciences\\
-    Dave Langers\\
-    Bart Barnard\\}
-- \fancyfoot[CE,CO]{\thepage}
-
 output:
-    pdf_document:
-      toc: true
-      toc_depth: 2
+  pdf_document:
+    includes:
+      in_header: report-dependencies/import.tex
+      before_body: report-dependencies/before_body.tex
 
+bibliography: report-dependencies/references.bib
+nocite: '@*'
 ---
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(fig.align = "center")
 ```
 
-# Preface
 
-# Abstract
-# Abbreviations
-# Contents
-# introduction
+\newpage
+<!-- (Introduction) -->
+# Introduction
+??
+
+
+\newpage
+<!-- (Methods) -->
 # Methods
+
+
+\newpage
+<!-- (Results) -->
 # Results
-# Conclusion
-# Discussion
-# References
+
+
+\newpage
+<!-- (Discussion and Conclusion) -->
+# Discussion and Conclusion
+
