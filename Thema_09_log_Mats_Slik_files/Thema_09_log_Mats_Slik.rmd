@@ -4,25 +4,35 @@ author: "Mats Slik"
 email: "m.p.slik@st.hanze.nl"
 
 date: "October 28th, 2022"
-header-includes:
-- \usepackage{fancyhdr}
-- \pagestyle{fancy}
-- - \setlength{\footskip}{12.0pt} # set the footer size
-- \fancyfoot[RO,RE]{Mats Slik (344216)\\
-    Bioinformatics - BFV3\\
-    Institute of Life Sciences \& Technology\\
-    Hanze University of Applied Sciences\\
-    Dave Langers\\
-    Bart Barnard\\}
-- \fancyfoot[CE,CO]{\thepage}
-numbersections: TRUE
-output:
-    pdf_document:
-      toc: true
-      toc_depth: 2
 
+output: pdf_document
 
 ---
+<!-- (Front page) -->
+\vspace{350pt}
+
+\hfill \textbf{Student}: Mats Slik
+
+\hfill \textbf{Student number}: 344216
+
+\hfill \textbf{Class}: BFV3
+
+\hfill \textbf{Study}: Bioinformatics
+
+\hfill \textbf{Institute}: Institute for Life Science & Technology
+
+\hfill \textbf{Teachers}: Dave Langers (LADR) and Bart Barnard (BABA)
+
+\hfill \textbf{Date}: `r Sys.Date()`
+
+\newpage
+<!-- (Table of contents) -->
+\setcounter{secnumdepth}{2}
+\tableofcontents
+\pagenumbering{arabic}
+
+
+\newpage
 
 
 # Dataset
@@ -87,8 +97,8 @@ note only the first 5 columns of "77_cancer_proteomes_CPTAC_itraq.csv" are shown
 ```{r data loading}
 protein_exp_data <- read.csv(file = "data//77_cancer_proteomes_CPTAC_itraq.csv")
 
-clinical_data <- read.csv(file = "data/clinical_data_breast_cancer.csv")
-pam50_protein_data <- read.csv(file = "data/PAM50_proteins.csv")
+clinical_data <- read.csv(file = "../data/clinical_data_breast_cancer.csv")
+pam50_protein_data <- read.csv(file = "../data/PAM50_proteins.csv")
 
 # showing succeseful loading of data
 
