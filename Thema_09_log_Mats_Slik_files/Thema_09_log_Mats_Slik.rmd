@@ -226,6 +226,11 @@ ggplot() +
   ylab("Frequency of columns") +
   ggtitle("Frequency of number of NA values per RefSeqID")
 
+ggsave(
+  filename = "figure1.png",
+  plot = last_plot(),
+  path = "../data/figures")
+
 ```
 ```{r plot making2 , fig.cap = "barplot with the frequency of columns with more than 0 NA in them", out.width = "90%"}
 ggplot() +
@@ -235,7 +240,10 @@ ggplot() +
   ylab("Frequency of columns") +
   ggtitle("Frequency of number of NA values per RefSeqID with 0 omitted")
 
-
+ggsave(
+  filename = "figure2.png",
+  plot = last_plot(),
+  path = "../data/figures")
 
 ```
 there are a lot of proteins with more than 10% of their samples with missing data, so i shall be removing.
@@ -284,6 +292,11 @@ boxplot(merged_data[6:76],
                            ylab = "log2 iTRAQ ratio",
                            main = "distribution of Protein expression for first 70 Proteins",
                            show.names= FALSE)
+
+ggsave(
+  filename = "figure3.png",
+  plot = last_plot(),
+  path = "../data/figures")
 ```
 
 Since i can't be sure of the significante of every protein i cant simple trow away any sample
@@ -316,6 +329,11 @@ ggplot(data=merged_fg) +
          color = "Legend") +
   ggtitle("Density plot for standard deviation of protein expression") +
   theme(legend.position = "bottom")
+
+ggsave(
+  filename = "figure4.png",
+  plot = last_plot(),
+  path = "../data/figures")
 
 ```
 
