@@ -37,3 +37,6 @@ knitr::opts_chunk$set(fig.align = "center")
 <!-- (Discussion and Conclusion) -->
 # Discussion and Conclusion
 
+<!-- (After-Body) -->
+```{r after body, child = 'report-dependencies/after_body.Rmd'}
+```
