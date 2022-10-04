@@ -15,7 +15,10 @@ knitr::opts_chunk$set(echo = TRUE)
 knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(fig.align = "center")
 library(RWeka)
+library(pander)
 ```
+
+
 ```{r data_loading, include=FALSE}
 data_set <- read.arff("..//data//cleaned_merge_data.arff")
 
@@ -37,15 +40,32 @@ data_set <- read.arff("..//data//cleaned_merge_data.arff")
 <!-- (Results) -->
 # Results
 When looking at the dimensions of the data set we can see there are allot of proteins
-```{r data_dimensions , include = FALSE, echo = TRUE}
+see table 1
+```{r data_dimensions, echo = FALSE,}
+pander(head(data_set[1:6]), n = 5)
 cat("number of rows:", nrow(data_set),
     "number of columns:", ncol(data_set), '\n')
 ```
-![alt text here](../data/figures/figure1.png)
-![alt text here](../data/figures/figure2.png)
-![alt text here](../data/figures/figure3.png)
-![alt text here](../data/figures/figure4.png)
+after this first assessment of the data we started looking at the number of missing values as seen in the figures fig 1 and 2 below
 
+![figure 1](../data/figures/figure1.png)
+
+![figure 2](../data/figures/figure2.png)
+
+
+as we can see in thes figures 1 and 2 the distribution is very much to the left where allot of proetis have one or only two missing values,
+further more there are still a couple of proteins that have a high number of missing values these are to be filtered out becaus this can create a false set of results when we are using them in oure machine learning algoritme for clustering them o there cancer stage.
+
+so to furthere see how the data is we took the distribution of a couple of proteins in a mullti boxplot as seen in figure 3
+
+![figure 3](../data/figures/figure3.png)
+
+in this figure 3 we can clearly see that for the first 70 protein thaty most have a distribution of ther log2 itraq expression between 5 and -5 but there are some that have higher numbers. to further make sense of all of the 12 to 9 thousand proteins in the data we calculated the standard deviation of them see figure 4
+
+![figure 4](../data/figures/figure4.png)
+
+in this figure 4 we compared the normal data set and the one filterd that has had protein with more tha 10% of there values missing removed.
+in it we can clearly see that allot of proteins with high deviation are removed from the data. to make a further analyse of thease samples
 \newpage
 <!-- (Discussion and Conclusion) -->
 # Discussion and Conclusion

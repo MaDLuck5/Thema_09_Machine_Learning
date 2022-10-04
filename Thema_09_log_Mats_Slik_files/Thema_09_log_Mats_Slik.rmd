@@ -286,20 +286,21 @@ we can see that not every sample had an entry in the clinical data, so we end up
 
 Showing some examples of distributions of protein expression data since there are around 12 000 proteins found
 ```{r plot making3, fig.cap = "boxplot of protein expression distribution, first 70 proteins", out.width = "90%"}
+
+# Open a png file
+png("data/figures/figure3.png")
+# 2. Create a plot
 boxplot(merged_data[6:76],
         col = rainbow(ncol(merged_data[6:76])),
                            xlab = "Protein",
                            ylab = "log2 iTRAQ ratio",
                            main = "distribution of Protein expression for first 70 Proteins",
                            show.names= FALSE)
-
-ggsave(
-  filename = "figure3.png",
-  plot = last_plot(),
-  path = "../data/figures")
+# Close the pdf file
+dev.off()
 ```
 
-Since i can't be sure of the significante of every protein i cant simple trow away any sample
+Since i can't be sure of the significant of every protein I can't simply trow away any sample
 
 to fix this i shall get the standard deviation from every protein to prepare for a selection of the most deviant ones.
 and for illustration i will overlay the dataframe which has been filtered from most NA values
@@ -338,7 +339,7 @@ ggsave(
 ```
 
 
-as we can see in the standard deviation compared from proteins with a lot of samples with NA in them to the filtered data, we see that the proteins with allot of NA in them seem to be having a higher Standard deviation, but still ther should be enough deviation in the filtered Data.
+as we can see in the standard deviation compared from proteins with a lot of samples with NA in them to the filtered data, we see that the proteins with a lot of NA in them seem to be having a higher Standard deviation, but still there should be enough deviation in the filtered Data.
 ```{r Assigning factors}
 # assigning as factors
 merged_data$Tumor <- factor(merged_data$Tumor)
@@ -349,6 +350,9 @@ cleaned_merge_data$Tumor <- factor(cleaned_merge_data$Tumor)
 cleaned_merge_data$Vital.Status <- factor(cleaned_merge_data$Vital.Status)
 cleaned_merge_data$AJCC.Stage <- factor(cleaned_merge_data$AJCC.Stage)
 
+```
+```{r plot figure , fig.cap = "distribution of amount of samples per tumor stage"}
+plot(cleaned_merge_data$Tumor, ylab = "Count", xlab="tumor stage", col ="#F9C000", main = "distribution of tumor stage")
 ```
 
 ```{r Data exportation}
