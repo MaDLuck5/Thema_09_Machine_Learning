@@ -30,6 +30,23 @@ output: pdf_document
 \tableofcontents
 \pagenumbering{arabic}
 
+```{r setup, include = 0}
+# packages
+library(pander)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(ggExtra)
+library(gridExtra)
+library(stringr)
+library(hrbrthemes)
+library(viridis)
+library(RWeka)
+library(MatrixGenerics)
+library(here)
+
+knitr::opts_knit$set(root.dir = here::here())
+```
 
 \newpage
 # Dataset
@@ -72,31 +89,16 @@ Original research paper: https://www.researchgate.net/publication/303509927_Prot
 
 my question is: Are there different ways to categorize breast cancer based on protein expression data, with machine learning being used to classify them without using the pam50 proteins?
 
-```{r setup, include = 0}
-# packages
-library(pander)
-library(tidyr)
-library(dplyr)
-library(ggplot2)
-library(ggExtra)
-library(gridExtra)
-library(stringr)
-library(hrbrthemes)
-library(viridis)
-library(RWeka)
-library(MatrixGenerics)
 
-```
 ## Exploratory Data Analysis
 
 loading of the dataframes and showing the successful loading and its dimensions.
 note only the first 5 columns of "77_cancer_proteomes_CPTAC_itraq.csv" are shown since after column 4 they are the same type.
 ```{r data loading}
 
-protein_exp_data <- read.csv(file = "../data/77_cancer_proteomes_CPTAC_itraq.csv")
-
-clinical_data <- read.csv(file = "../data/clinical_data_breast_cancer.csv")
-pam50_protein_data <- read.csv(file = "../data/PAM50_proteins.csv")
+protein_exp_data <- read.csv(file = "data//77_cancer_proteomes_CPTAC_itraq.csv")
+clinical_data <- read.csv(file = "data//clinical_data_breast_cancer.csv")
+pam50_protein_data <- read.csv(file = "data/PAM50_proteins.csv")
 
 # showing succeseful loading of data
 
@@ -139,9 +141,9 @@ loading of the created codebooks for the three dataframes.
 showing also its contents and successful loading
 ```{r code book visualisation}
 
-cancer_proteomes_CPTAC_codebook <- read.csv2("../data/77_cancer_proteomes_CPTAC_codebook.txt")
-clinical_data_codebook <- read.csv2("../data/clinical_data_breast_cancer_codebook.txt")
-PAM50_protein_codebook <- read.csv2("../data/PAM50_protein_codebook.txt", sep = ";")
+cancer_proteomes_CPTAC_codebook <- read.csv2("data/77_cancer_proteomes_CPTAC_codebook.txt")
+clinical_data_codebook <- read.csv2("data/clinical_data_breast_cancer_codebook.txt")
+PAM50_protein_codebook <- read.csv2("data/PAM50_protein_codebook.txt", sep = ";")
 
 
 pander(cancer_proteomes_CPTAC_codebook)
@@ -270,15 +272,18 @@ to be able to use the Clinical dat we need to merge it to its corresponding row 
 # firs assigning row names to clinical data
 rownames(clinical_data) <- clinical_data$Complete.TCGA.ID
 
+cleaned_healthy_samples <- data.frame(Tumor = rep("Healthy", 3)) %>%
+    "rownames<-"(rownames(proteomes_filtered_data[81:83,]))
+
 # removing the used ID column to simplifie it since it has been become redundend
-clinical_data <- clinical_data[,-1]
+clinical_data <- select(clinical_data, Tumor) %>%
+    rbind(cleaned_healthy_samples)
 
 # mergin the two data frames according to the row names (TCGA Identification number),
-merged_data <- merge(select(clinical_data, Tumor, Tumor..T1.Coded, AJCC.Stage, Vital.Status), protein_exp__numerical_transposed, by = 0)
-cleaned_merge_data <- merge(select(clinical_data, Tumor, Tumor..T1.Coded, AJCC.Stage, Vital.Status), proteomes_filtered_data, by = 0)
+merged_data <- merge(clinical_data, protein_exp__numerical_transposed, by = 0)
+cleaned_merged_data <- merge(clinical_data, proteomes_filtered_data, by = 0)
 cat("merged_data of rows:", nrow(merged_data),
     "number of columns:",ncol(merged_data),'\n')
-
 ```
 we can see that not every sample had an entry in the clinical data, so we end up with 6 rows of sample data that get left out of the merged data set
 
@@ -288,7 +293,7 @@ Showing some examples of distributions of protein expression data since there ar
 ```{r plot making3, fig.cap = "boxplot of protein expression distribution, first 70 proteins", out.width = "90%"}
 
 # Open a png file
-png("data/figures/figure3.png")
+#png("../data/figures/figure3.png")
 # 2. Create a plot
 boxplot(merged_data[6:76],
         col = rainbow(ncol(merged_data[6:76])),
@@ -297,7 +302,7 @@ boxplot(merged_data[6:76],
                            main = "distribution of Protein expression for first 70 Proteins",
                            show.names= FALSE)
 # Close the pdf file
-dev.off()
+#dev.off()
 ```
 
 Since i can't be sure of the significant of every protein I can't simply trow away any sample
@@ -307,11 +312,11 @@ and for illustration i will overlay the dataframe which has been filtered from m
 
 ```{r plot making4, fig.cap = "scatterplot of standard deviation for the protein expresion data and for the NA filterd version", out.width = "90%"}
 fg <- colSds(as.matrix(merged_data[sapply(merged_data, is.numeric)]), na.rm = TRUE)
-fg2 <- colSds(as.matrix(cleaned_merge_data[sapply(cleaned_merge_data, is.numeric)]), na.rm = TRUE)
+fg2 <- colSds(as.matrix(cleaned_merged_data[sapply(cleaned_merged_data, is.numeric)]), na.rm = TRUE)
 
 
 fg <- as.data.frame(fg, row.names = colnames(merged_data[6:ncol(merged_data)]))
-fg2 <- as.data.frame(fg2, row.names = colnames(cleaned_merge_data[6:ncol(cleaned_merge_data)]))
+fg2 <- as.data.frame(fg2, row.names = colnames(cleaned_merged_data[6:ncol(cleaned_merged_data)]))
 
 fg$count <- seq(from = 1, to = nrow(fg))
 
@@ -343,21 +348,14 @@ as we can see in the standard deviation compared from proteins with a lot of sam
 ```{r Assigning factors}
 # assigning as factors
 merged_data$Tumor <- factor(merged_data$Tumor)
-merged_data$Vital.Status <- factor(merged_data$Vital.Status)
-merged_data$AJCC.Stage <- factor(merged_data$AJCC.Stage)
-
-cleaned_merge_data$Tumor <- factor(cleaned_merge_data$Tumor)
-cleaned_merge_data$Vital.Status <- factor(cleaned_merge_data$Vital.Status)
-cleaned_merge_data$AJCC.Stage <- factor(cleaned_merge_data$AJCC.Stage)
-
+cleaned_merged_data$Tumor <- factor(cleaned_merged_data$Tumor)
 ```
 ```{r plot figure , fig.cap = "distribution of amount of samples per tumor stage"}
-plot(cleaned_merge_data$Tumor, ylab = "Count", xlab="tumor stage", col ="#F9C000", main = "distribution of tumor stage")
+plot(cleaned_merged_data$Tumor, ylab = "Count", xlab="tumor stage", col ="#F9C000", main = "distribution of tumor stage")
 ```
 
 ```{r Data exportation}
 
-
-write.arff(merged_data, file = "../data/merged_data.arff")
-write.arff(cleaned_merge_data, file = "../data/cleaned_merge_data.arff")
+write.arff(merged_data, file = "data/merged_data.arff")
+write.arff(cleaned_merged_data, file = "data/cleaned_merged_data.arff")
 ```
