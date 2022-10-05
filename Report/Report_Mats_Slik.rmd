@@ -16,11 +16,14 @@ knitr::opts_chunk$set(warning = FALSE)
 knitr::opts_chunk$set(fig.align = "center")
 library(RWeka)
 library(pander)
+library(here)
+
+knitr::opts_knit$set(root.dir = here::here())
 ```
 
 
 ```{r data_loading, include=FALSE}
-data_set <- read.arff("..//data//cleaned_merge_data.arff")
+data_set <- read.arff("data//cleaned_merged_data.arff")
 
 ```
 
@@ -74,10 +77,10 @@ in this figure 5 we can see how the diffrent samples are spread according to the
 <!-- (Discussion and Conclusion) -->
 # Discussion and Conclusion
 
-in the results section we can see from the figures 1 and two that although the data set was supplied with the label as high quality there are still proteis in the data with
+in the results' section we can see from the figures 1 and two that although the data set was supplied with the label as high quality there are still proteins in the data with
 more tha 10% of there expression values missing, this combined with the need for using the expressing data with the clinical categorical data, the sample names needed to be changed to be compared.
-all this wasnt something to be expecting of high quality data. also in figure 5 it is clearlyt visible that the catagorisation of the tumor stage there are allot of T2 stages in the samples than any other.
-
+all this wasn't something to be expecting of high quality data. also in figure 5 it is clearly visible that the categorisation of the tumor stage there are a lot of T2 stages in the samples than any other.
+furthermore the sheer amount of proteins recorded in this data is very useful for my purpose of trying to use another classification as the PAM50 protein list
 <!-- (After-Body) -->
-```{r after body, child = 'report-dependencies/after_body.Rmd'}
+```{r after body, child = 'report/report-dependencies/after_body.Rmd'}
 ```
