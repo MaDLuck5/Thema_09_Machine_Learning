@@ -349,6 +349,8 @@ as we can see in the standard deviation compared from proteins with a lot of sam
 # assigning as factors
 merged_data$Tumor <- factor(merged_data$Tumor)
 cleaned_merged_data$Tumor <- factor(cleaned_merged_data$Tumor)
+#merged_data$Row.names <- factor(merged_data$Row.names, levels =)
+#cleaned_merged_data$Row.names <- factor(cleaned_merged_data$Row.names)
 ```
 ```{r plot figure , fig.cap = "distribution of amount of samples per tumor stage"}
 plot(cleaned_merged_data$Tumor, ylab = "Count", xlab="tumor stage", col ="#F9C000", main = "distribution of tumor stage")
@@ -359,3 +361,4 @@ plot(cleaned_merged_data$Tumor, ylab = "Count", xlab="tumor stage", col ="#F9C00
 write.arff(merged_data, file = "data/merged_data.arff")
 write.arff(cleaned_merged_data, file = "data/cleaned_merged_data.arff")
 ```
+# machine learning
