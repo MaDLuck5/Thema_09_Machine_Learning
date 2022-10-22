@@ -356,9 +356,22 @@ cleaned_merged_data$Tumor <- factor(cleaned_merged_data$Tumor)
 plot(cleaned_merged_data$Tumor, ylab = "Count", xlab="tumor stage", col ="#F9C000", main = "distribution of tumor stage")
 ```
 
+
+# machine learning
+
+In this chapter, we are looking at how we are going to train the machine learning algorithms to accurately predict the tumor stage of breast cancer according to the protein expressions found in breast tissue samples.
+after that there shall be a examination of the result and accuracy of the created models accordingly to different algorithms.
+
+## Weka
+
+Weka is used for the data examination and machine learning part, Weka is a open source collection of machine learning algorithms for data mining tasks. It contains tools for data preparation, classification, regression, clustering, association rules mining, and visualization. java platform for
+Firstly the data is exported to a .arff file so it can be loaded into Weka
 ```{r Data exportation}
 
 write.arff(merged_data, file = "data/merged_data.arff")
 write.arff(cleaned_merged_data, file = "data/cleaned_merged_data.arff")
 ```
-# machine learning
+
+### Data imbalance
+
+## Models
