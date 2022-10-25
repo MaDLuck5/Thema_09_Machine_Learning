@@ -44,6 +44,8 @@ library(viridis)
 library(RWeka)
 library(MatrixGenerics)
 library(here)
+library(smotefamily)
+
 
 knitr::opts_knit$set(root.dir = here::here())
 ```
@@ -369,9 +371,19 @@ Firstly the data is exported to a .arff file so it can be loaded into Weka
 ```{r Data exportation}
 
 write.arff(merged_data, file = "data/merged_data.arff")
-write.arff(cleaned_merged_data, file = "data/cleaned_merged_data.arff")
+write.arff(cleaned_merged_data, file = "data/test_data_cleaned.arff")
 ```
 
 ### Data imbalance
+```{r}
+set.seed(420)
+#cleaned_merged_data[,3:9201] <- na.aggregate(cleaned_merged_data[,3:9201])
+                                              # Duplicate data frame
+for(i in 1:ncol(cleaned_merged_data)) {                                   # Replace NA in all columns
+  cleaned_merged_data[ , i][is.na(cleaned_merged_data[ , i])] <- mean(cleaned_merged_data[ , i], na.rm = TRUE)
+}
+synthectic_training_data <-ANS(cleaned_merged_data[,3:9201], cleaned_merged_data$Tumor)
 
+
+```
 ## Models
