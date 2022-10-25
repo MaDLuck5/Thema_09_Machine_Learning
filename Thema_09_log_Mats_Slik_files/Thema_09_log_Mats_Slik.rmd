@@ -31,6 +31,7 @@ output: pdf_document
 \pagenumbering{arabic}
 
 ```{r setup, include = 0}
+
 # packages
 library(pander)
 library(tidyr)
@@ -45,6 +46,9 @@ library(RWeka)
 library(MatrixGenerics)
 library(here)
 library(smotefamily)
+library(recipes)
+library(caret)
+
 
 
 knitr::opts_knit$set(root.dir = here::here())
@@ -377,13 +381,21 @@ write.arff(cleaned_merged_data, file = "data/test_data_cleaned.arff")
 ### Data imbalance
 ```{r}
 set.seed(420)
-#cleaned_merged_data[,3:9201] <- na.aggregate(cleaned_merged_data[,3:9201])
-                                              # Duplicate data frame
 for(i in 1:ncol(cleaned_merged_data)) {                                   # Replace NA in all columns
   cleaned_merged_data[ , i][is.na(cleaned_merged_data[ , i])] <- mean(cleaned_merged_data[ , i], na.rm = TRUE)
 }
-synthectic_training_data <-ANS(cleaned_merged_data[,3:9201], cleaned_merged_data$Tumor)
+synthectic_training <- ANS(cleaned_merged_data[,3:9201], cleaned_merged_data$Tumor,dupSize = 0)
+synth_data <- as.data.frame(synthectic_training[1])
+train <- createDataPartition(synth_data$data.class,
+                             p = 0.7, # % of data going to training
+                             times = 1,
+                             list = F)
+train.orig <- synth_data[ train,]
+test       <- synth_data[-train,]
 
+train.orig$data.class <- as.factor(train.orig$data.class)
+test$data.class <- as.factor(test$data.class)
+#synthectic_training_data <- ANS(cleaned_merged_data[,3:9201], cleaned_merged_data$Tumor,dupSize = 0)
 
 ```
 ## Models
