@@ -278,16 +278,13 @@ to be able to use the Clinical dat we need to merge it to its corresponding row 
 # firs assigning row names to clinical data
 rownames(clinical_data) <- clinical_data$Complete.TCGA.ID
 
-cleaned_healthy_samples <- data.frame(Tumor = rep("Healthy", 3)) %>%
-    "rownames<-"(rownames(proteomes_filtered_data[81:83,]))
 
 # removing the used ID column to simplifie it since it has been become redundend
-clinical_data <- select(clinical_data, Tumor) %>%
-    rbind(cleaned_healthy_samples)
+clinical_data <- clinical_data[,-1]
 
 # mergin the two data frames according to the row names (TCGA Identification number),
-merged_data <- merge(clinical_data, protein_exp__numerical_transposed, by = 0)
-cleaned_merged_data <- merge(clinical_data, proteomes_filtered_data, by = 0)
+merged_data <- merge(select(clinical_data, Tumor, Tumor..T1.Coded, AJCC.Stage, Vital.Status), protein_exp__numerical_transposed, by = 0)
+cleaned_merged_data <- merge(select(clinical_data, Tumor, Tumor..T1.Coded, AJCC.Stage, Vital.Status), proteomes_filtered_data, by = 0)
 cat("merged_data of rows:", nrow(merged_data),
     "number of columns:",ncol(merged_data),'\n')
 ```
@@ -317,6 +314,7 @@ to fix this i shall get the standard deviation from every protein to prepare for
 and for illustration i will overlay the dataframe which has been filtered from most NA values
 
 ```{r plot making4, fig.cap = "scatterplot of standard deviation for the protein expresion data and for the NA filterd version", out.width = "90%"}
+
 fg <- colSds(as.matrix(merged_data[sapply(merged_data, is.numeric)]), na.rm = TRUE)
 fg2 <- colSds(as.matrix(cleaned_merged_data[sapply(cleaned_merged_data, is.numeric)]), na.rm = TRUE)
 
@@ -372,30 +370,32 @@ after that there shall be a examination of the result and accuracy of the create
 
 Weka is used for the data examination and machine learning part, Weka is a open source collection of machine learning algorithms for data mining tasks. It contains tools for data preparation, classification, regression, clustering, association rules mining, and visualization. java platform for
 Firstly the data is exported to a .arff file so it can be loaded into Weka
-```{r Data exportation}
 
-write.arff(merged_data, file = "data/merged_data.arff")
-write.arff(cleaned_merged_data, file = "data/test_data_cleaned.arff")
-```
 
 ### Data imbalance
 ```{r}
 set.seed(420)
-for(i in 1:ncol(cleaned_merged_data)) {                                   # Replace NA in all columns
-  cleaned_merged_data[ , i][is.na(cleaned_merged_data[ , i])] <- mean(cleaned_merged_data[ , i], na.rm = TRUE)
-}
-synthectic_training <- ANS(cleaned_merged_data[,3:9201], cleaned_merged_data$Tumor,dupSize = 0)
-synth_data <- as.data.frame(synthectic_training[1])
-train <- createDataPartition(synth_data$data.class,
+
+
+train <- createDataPartition(cleaned_merged_data$Tumor,
                              p = 0.7, # % of data going to training
                              times = 1,
                              list = F)
-train.orig <- synth_data[ train,]
-test       <- synth_data[-train,]
+train.orig <- cleaned_merged_data[ train,]
+test       <- cleaned_merged_data[-train,]
 
-train.orig$data.class <- as.factor(train.orig$data.class)
-test$data.class <- as.factor(test$data.class)
-#synthectic_training_data <- ANS(cleaned_merged_data[,3:9201], cleaned_merged_data$Tumor,dupSize = 0)
+train.orig <- train.orig[,c(-1,-3:-5)]
+test       <- test[,c(-1,-3:-5)]
 
+train.orig$data.class <- as.factor(train.orig$Tumor)
+test$data.class <- as.factor(test$Tumor)
+
+
+
+```
+```{r Data exportation}
+
+write.arff(train.orig, file = "data/train.orig.arff")
+write.arff(test, file = "data/test_data.arff")
 ```
 ## Models
