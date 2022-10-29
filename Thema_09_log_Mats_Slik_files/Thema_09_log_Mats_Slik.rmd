@@ -424,3 +424,31 @@ Total Number of Instances               77
   0 51  0  0 |  b = T2
   0 11  0  0 |  c = T3
   0  5  0  0 |  d = T4
+
+#### RandomTree
+
+#####
+
+#### RandomForest
+
+#####
+
+#### J48
+
+#####
+
+#### AttributeSelectedClassifier
+
+##### J48 CfsSubsetEval GreedyStepwise
+
+##### J48 CfsSubsetEval BestFirst Bi directional
+
+##### J48 CfsSubsetEval BestFirst Forward
+
+##### J48 ClassifierSubsetEval Ranker
+
+#### Adaboost-M1 AttributeSelectedClassifier CfsSubsetEval Ranker
+
+##### Randomforest  CfsSubsetEval BestFirst Bi-directrional
+
+##### RandomTree  CfsSubsetEval BestFirst Bi-directrional
