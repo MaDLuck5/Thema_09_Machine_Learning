@@ -1,0 +1,53 @@
+apply plugin: 'java'
+apply plugin: 'application'
+apply plugin: 'idea'
+
+group 'nl.bioinf.mpslik.Java-Wrapper'
+version '0.0.1'
+// Define the main class for the application
+mainClassName = 'nl.bioinf.mpslik.ML-Model-Wrapper'
+
+repositories {
+    //jcenter()
+    mavenCentral()
+}
+
+dependencies {
+    // https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable
+    implementation group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.5'
+    implementation('commons-cli:commons-cli:1.5.0')
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
+}
+
+jar {
+    description 'creates executable jar without dependencies'
+    baseName = 'ML-Model-Wrapper-application'
+
+    manifest {
+        attributes 'Main-Class': mainClassName,
+                "Class-Path": configurations.runtimeClasspath { "lib/" + it.getName() }.join(' ')
+    }
+}
+
+//create a single Jar with all dependencies
+// see https://www.mkyong.com/gradle/gradle-create-a-jar-file-with-dependencies/
+task fatJar(type: Jar) {
+    group 'build'
+    description 'fat jar building with dependencies'
+
+    manifest {
+        attributes 'Implementation-Title': 'Gradle Jar File Example',
+                'Implementation-Version': version,
+                'Main-Class': mainClassName
+    }
+    baseName = 'CLIdemo-Fatjar'
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+}
+
+task install(type: Copy) {
+    group 'build'
+    dependsOn build
+    from configurations.implementation
+    into "${project.projectDir}/build/libs/lib"
+}
