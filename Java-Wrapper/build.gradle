@@ -2,10 +2,12 @@ apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'idea'
 
-group 'nl.bioinf.mpslik.Java-Wrapper'
+group 'nl.bioinf.mpslik.JavaWrapper'
 version '0.0.1'
+
+sourceCompatibility = JavaVersion.VERSION_17
 // Define the main class for the application
-mainClassName = 'nl.bioinf.mpslik.ML-Model-Wrapper'
+mainClassName = 'nl.bioinf.mpslik.MLModelWrapper'
 
 repositories {
     //jcenter()
@@ -16,12 +18,12 @@ dependencies {
     // https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable
     implementation group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.5'
     implementation('commons-cli:commons-cli:1.5.0')
-    testImplementation group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 }
 
 jar {
     description 'creates executable jar without dependencies'
-    baseName = 'ML-Model-Wrapper-application'
+    baseName = 'MLModelWrapperApplication'
 
     manifest {
         attributes 'Main-Class': mainClassName,

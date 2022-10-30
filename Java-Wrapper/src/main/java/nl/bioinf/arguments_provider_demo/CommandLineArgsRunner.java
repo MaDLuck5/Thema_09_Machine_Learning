@@ -11,7 +11,6 @@ import java.util.Arrays;
  * Main class designed to work with user input provided standard CL arguments and parsed using Apache CLI. Class is
  * final because it is not designed for extension.
  *
- * @author michiel
  */
 public final class CommandLineArgsRunner {
 
