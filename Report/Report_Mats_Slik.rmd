@@ -51,19 +51,19 @@ cat("number of rows:", nrow(data_set),
 ```
 After this first assessment of the data we started looking at the number of missing values as seen in the figures' fig 1 and 2 below
 
-![figure 1](../data/figures/figure1.png)
+![figure 1](../Analysis/data/figures/figure1.png)
 
-![figure 2](../data/figures/figure2.png)
+![figure 2](../Analysis/data/figures/figure2.png)
 
 As we can see in these figures 1 and 2 the distribution is very much to the left where a lot of proteins have one or only two missing values,
 further more there are still a couple of proteins that have a high number of missing values these are to be filtered out because this can create a false set of results when we are using them in our machine learning algoritme for clustering them o there cancer stage.
 so to further see how the data is we took the distribution of a couple of proteins in a multi boxplot as seen in figure 3
 
-![figure 3](../data/figures/figure3.png)
+![figure 3](../Analysis/data/figures/figure3.png)
 
 In this figure 3 we can clearly see that for the first 70 protein that most have a distribution of their log2 itraq expression between 5 and -5 but there are some that have higher numbers. to further make sense of all the 12 to 9 thousand proteins in the data we calculated the standard deviation of them see figure 4
 
-![figure 4](../data/figures/figure4.png)
+![figure 4](../Analysis/data/figures/figure4.png)
 
 In this figure 4 we compared the normal data set and the one filterd that has had protein with more tha 10% of their values missing removed.
 In it, we can clearly see that a lot of proteins with high deviation are removed from the data. to make a further analyse of these samples

@@ -104,7 +104,7 @@ note only the first 5 columns of "77_cancer_proteomes_CPTAC_itraq.csv" are shown
 
 protein_exp_data <- read.csv(file = "data//77_cancer_proteomes_CPTAC_itraq.csv")
 clinical_data <- read.csv(file = "data//clinical_data_breast_cancer.csv")
-pam50_protein_data <- read.csv(file = "data/PAM50_proteins.csv")
+pam50_protein_data <- read.csv(file = "../data/PAM50_proteins.csv")
 
 # showing succeseful loading of data
 
@@ -147,9 +147,9 @@ loading of the created codebooks for the three dataframes.
 showing also its contents and successful loading
 ```{r code book visualisation}
 
-cancer_proteomes_CPTAC_codebook <- read.csv2("data/77_cancer_proteomes_CPTAC_codebook.txt")
-clinical_data_codebook <- read.csv2("data/clinical_data_breast_cancer_codebook.txt")
-PAM50_protein_codebook <- read.csv2("data/PAM50_protein_codebook.txt", sep = ";")
+cancer_proteomes_CPTAC_codebook <- read.csv2("../data/77_cancer_proteomes_CPTAC_codebook.txt")
+clinical_data_codebook <- read.csv2("../data/clinical_data_breast_cancer_codebook.txt")
+PAM50_protein_codebook <- read.csv2("../data/PAM50_protein_codebook.txt", sep = ";")
 
 
 pander(cancer_proteomes_CPTAC_codebook)
@@ -395,8 +395,8 @@ train2$data.class <- as.factor(train2$Tumor)
 ```
 ```{r Data exportation}
 train2 <- train2[,-1]
-write.arff(train.orig, file = "data/train.orig.arff")
-write.arff(test, file = "data/test_data.arff")
+write.arff(train.orig, file = "../data/train.orig.arff")
+write.arff(test, file = "../data/test_data.arff")
 write.arff(train2, file = "data/train2.arff")
 ```
 ## Models

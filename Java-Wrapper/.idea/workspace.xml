@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02ccc59e-26c4-4973-b7b6-f732a2829533" name="Changes" comment="">
+    <list default="true" id="02ccc59e-26c4-4973-b7b6-f732a2829533" name="Changes" comment="added java wrapper base">
       <change afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Thema_09_log_Mats_Slik_files/Thema_09_log_Mats_Slik.rmd" beforeDir="false" afterPath="$PROJECT_DIR$/../Thema_09_log_Mats_Slik_files/Thema_09_log_Mats_Slik.rmd" afterDir="false" />
     </list>
