@@ -69,15 +69,5 @@ Adjust this to your needs, of course.
 
 
 ```
-.gradle
-/build/
-/.idea
-/gradle
-gradlew
-gradlew.bat
-CLIdemo.iml
 
-*.class
-*.log
-*.jar
 ```

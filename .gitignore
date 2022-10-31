@@ -1,11 +1,11 @@
 .gradle
 /build/
-/.idea
-/gradle
+.idea
+gradle
 gradlew
 gradlew.bat
 CLIdemo.iml
 
-*.class
-*.log
-*.jar
+.class
+.log
+.jar
