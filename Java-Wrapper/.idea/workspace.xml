@@ -4,13 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="02ccc59e-26c4-4973-b7b6-f732a2829533" name="Changes" comment="added java wrapper base">
-      <change afterPath="$PROJECT_DIR$/src/main/java/MLModelWrapper.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/WekaRunner.java" afterDir="false" />
+    <list default="true" id="02ccc59e-26c4-4973-b7b6-f732a2829533" name="Changes" comment="changes to wrapper">
       <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/MLModelWrapper.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/bioinf/MLModelWrapper.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/WekaRunner.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/nl/bioinf/WekaRunner.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/nl/bioinf/arguments_provider_demo/ApacheCliOptionsProviderTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/nl/bioinf/arguments_provider_demo/ApacheCliOptionsProviderTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,6 +41,11 @@
                 <item name="Java-Wrapper" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
               </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="Java-Wrapper" type="f1a62948:ProjectNode" />
+                <item name="Run Configurations" type="7b0102dc:RunConfigurationsNode" />
+              </path>
             </expand>
             <select />
           </tree_state>
@@ -66,15 +72,43 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_directory_selection": "C:/Users/matsp/Documents/Thema-09/Project_thema_09/Java-Wrapper/src/main/java/nl/bioinf",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.0",
+    "project.structure.side.proportion": "0.0",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
   }
-}</component>
-  <component name="RunManager">
+}]]></component>
+  <component name="RunManager" selected="Gradle.ApacheCliOptionsProviderTest">
+    <configuration name="ApacheCliOptionsProviderTest" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" value="" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value=":test" />
+            <option value="--tests" />
+            <option value="&quot;nl.bioinf.arguments_provider_demo.ApacheCliOptionsProviderTest&quot;" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>false</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <method v="2" />
+    </configuration>
     <configuration name="Java-Wrapper [jar]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
       <ExternalSystemSettings>
         <option name="executionName" />
@@ -98,6 +132,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.ApacheCliOptionsProviderTest" />
         <item itemvalue="Gradle.Java-Wrapper [jar]" />
       </list>
     </recent_temporary>
@@ -112,8 +147,19 @@
       <updated>1667126564398</updated>
       <workItem from="1667126569309" duration="286000" />
       <workItem from="1667127985294" duration="2869000" />
-      <workItem from="1667139961177" duration="3372000" />
+      <workItem from="1667139961177" duration="5264000" />
+      <workItem from="1667223693288" duration="1370000" />
+      <workItem from="1667227811457" duration="685000" />
+      <workItem from="1667239013343" duration="1706000" />
     </task>
+    <task id="LOCAL-00001" summary="changes to wrapper">
+      <created>1667150401871</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1667150401871</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -129,5 +175,13 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="changes to wrapper" />
+    <option name="LAST_COMMIT_MESSAGE" value="changes to wrapper" />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
   </component>
 </project>

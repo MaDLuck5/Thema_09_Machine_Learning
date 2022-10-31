@@ -5,10 +5,10 @@ import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 /**
- * Creation date: Jun 28, 2017
+ * Creation date: Oct 31, 2022
  *
  * @version 0.01
- * @autor Michiel Noback (&copy; 2017)
+ * @autor Mats
  */
 public class ApacheCliOptionsProviderTest {
 

@@ -1,6 +1,6 @@
 package nl.bioinf;
 
-import weka.classifiers.trees.J48;
+import weka.classifiers.meta.AttributeSelectedClassifier;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -35,9 +35,9 @@ public class WekaRunner {
         try {
             Instances instances = loadArff(datafile);
             printInstances(instances);
-            J48 j48 = buildClassifier(instances);
-            saveClassifier(j48);
-            J48 fromFile = loadClassifier();
+            AttributeSelectedClassifier attributeselected = buildClassifier(instances);
+            saveClassifier(attributeselected);
+            AttributeSelectedClassifier fromFile = loadClassifier();
             Instances unknownInstances = loadArff(unknownFile);
             System.out.println("\nunclassified unknownInstances = \n" + unknownInstances);
             classifyNewInstance(fromFile, unknownInstances);
@@ -47,7 +47,7 @@ public class WekaRunner {
         }
     }
 
-    private void classifyNewInstance(J48 tree, Instances unknownInstances) throws Exception {
+    private void classifyNewInstance(AttributeSelectedClassifier tree, Instances unknownInstances) throws Exception {
         // create copy
         Instances labeled = new Instances(unknownInstances);
         // label instances
@@ -58,27 +58,27 @@ public class WekaRunner {
         System.out.println("\nNew, labeled = \n" + labeled);
     }
 
-    private J48 loadClassifier() throws Exception {
+    private AttributeSelectedClassifier loadClassifier() throws Exception {
         // deserialize model
-        return (J48) weka.core.SerializationHelper.read(modelFile);
+        return (AttributeSelectedClassifier) weka.core.SerializationHelper.read(modelFile);
     }
 
-    private void saveClassifier(J48 j48) throws Exception {
+    private void saveClassifier(AttributeSelectedClassifier attributeselected) throws Exception {
         //post 3.5.5
         // serialize model
-        weka.core.SerializationHelper.write(modelFile, j48);
+        weka.core.SerializationHelper.write(modelFile, attributeselected);
 
         // serialize model pre 3.5.5
 //        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(modelFile));
-//        oos.writeObject(j48);
+//        oos.writeObject(attributeselected);
 //        oos.flush();
 //        oos.close();
     }
 
-    private J48 buildClassifier(Instances instances) throws Exception {
+    private AttributeSelectedClassifier buildClassifier(Instances instances) throws Exception {
         String[] options = new String[1];
         options[0] = "-U";            // unpruned tree
-        J48 tree = new J48();         // new instance of tree
+        AttributeSelectedClassifier tree = new AttributeSelectedClassifier();         // new instance of tree
         tree.setOptions(options);     // set the options
         tree.buildClassifier(instances);   // build classifier
         return tree;
