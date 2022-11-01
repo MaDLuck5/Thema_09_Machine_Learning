@@ -1,6 +1,7 @@
 package nl.bioinf;
 
 import weka.classifiers.meta.AttributeSelectedClassifier;
+import weka.classifiers.rules.ZeroR;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -22,24 +23,25 @@ import java.io.IOException;
  * RandomTree treeClassifier = (RandomTree) SerializationHelper.read(new FileInputStream("model.weka")));
  */
 public class WekaRunner {
-    private final String modelFile = "testdata/j48.model";
+    private final String modelFile = "src/main/resources/Model_05.model";
 
     public static void main(String[] args) {
         WekaRunner runner = new WekaRunner();
-        runner.start();
+        runner.start(args);
     }
 
-    private void start() {
-        String datafile = "testdata/weather.nominal.arff";
-        String unknownFile = "testdata/unknown_weather.arff";
+    private void start(String[] args) {
+        //String datafile = args[0];
+        String testFile = args[0];
         try {
-            Instances instances = loadArff(datafile);
-            printInstances(instances);
-            AttributeSelectedClassifier attributeselected = buildClassifier(instances);
-            saveClassifier(attributeselected);
+            //Instances instances = loadArff(datafile);
+            //printInstances(instances);
+            //AttributeSelectedClassifier attributeselected = buildClassifier(instances);
+            //saveClassifier(attributeselected);
             AttributeSelectedClassifier fromFile = loadClassifier();
-            Instances unknownInstances = loadArff(unknownFile);
-            System.out.println("\nunclassified unknownInstances = \n" + unknownInstances);
+            Instances unknownInstances = loadArff(testFile);
+            unknownInstances.setClassIndex(1);
+            //System.out.println("\nunclassified unknownInstances = \n" + unknownInstances);
             classifyNewInstance(fromFile, unknownInstances);
 
         } catch (Exception e) {
@@ -50,38 +52,24 @@ public class WekaRunner {
     private void classifyNewInstance(AttributeSelectedClassifier tree, Instances unknownInstances) throws Exception {
         // create copy
         Instances labeled = new Instances(unknownInstances);
+        String[] attributeValues = {"T1", "T2", "T3", "T4"};
         // label instances
         for (int i = 0; i < unknownInstances.numInstances(); i++) {
             double clsLabel = tree.classifyInstance(unknownInstances.instance(i));
+            System.out.println(unknownInstances.instance(i));
             labeled.instance(i).setClassValue(clsLabel);
+            String result = attributeValues[(int) clsLabel];
+            System.out.println("instance classified as:" + result);;
         }
-        System.out.println("\nNew, labeled = \n" + labeled);
+        //System.out.println("\nNew, labeled = \n" + labeled);
     }
+
+
+
 
     private AttributeSelectedClassifier loadClassifier() throws Exception {
         // deserialize model
         return (AttributeSelectedClassifier) weka.core.SerializationHelper.read(modelFile);
-    }
-
-    private void saveClassifier(AttributeSelectedClassifier attributeselected) throws Exception {
-        //post 3.5.5
-        // serialize model
-        weka.core.SerializationHelper.write(modelFile, attributeselected);
-
-        // serialize model pre 3.5.5
-//        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(modelFile));
-//        oos.writeObject(attributeselected);
-//        oos.flush();
-//        oos.close();
-    }
-
-    private AttributeSelectedClassifier buildClassifier(Instances instances) throws Exception {
-        String[] options = new String[1];
-        options[0] = "-U";            // unpruned tree
-        AttributeSelectedClassifier tree = new AttributeSelectedClassifier();         // new instance of tree
-        tree.setOptions(options);     // set the options
-        tree.buildClassifier(instances);   // build classifier
-        return tree;
     }
 
     private void printInstances(Instances instances) {
