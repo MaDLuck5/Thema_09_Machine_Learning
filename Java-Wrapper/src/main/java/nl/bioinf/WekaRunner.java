@@ -26,7 +26,6 @@ import java.io.IOException;
  * RandomTree treeClassifier = (RandomTree) SerializationHelper.read(new FileInputStream("model.weka")));
  */
 public class WekaRunner {
-    private final String modelFile = "src/main/resources/Model_05.model";
 
     public static void main(String[] args) {
         WekaRunner runner = new WekaRunner();
@@ -36,6 +35,7 @@ public class WekaRunner {
     private void start(String[] args) {
         //String datafile = args[0];
         String testFile = args[0];
+        System.out.println("Data File loaded:" + testFile);
         try {
             //Instances instances = loadArff(datafile);
             //printInstances(instances);
@@ -52,7 +52,7 @@ public class WekaRunner {
         }
     }
 
-    private void classifyNewInstance(AttributeSelectedClassifier tree, Instances unknownInstances) throws Exception {
+    private void classifyNewInstance(AttributeSelectedClassifier cls, Instances unknownInstances) throws Exception {
         // create copy
         Instances labeled = new Instances(unknownInstances);
         // label instances
@@ -65,9 +65,20 @@ public class WekaRunner {
             }
         };
         for (int i = 0; i < unknownInstances.numInstances(); i++) {
-            double clsLabel = tree.classifyInstance(unknownInstances.instance(i));
-            System.out.println(unknownInstances.instance(i));
+            Instance inst = labeled.instance(i);
+            double actualClassValue  = labeled.instance(i).classValue();
+
+            String actual = labeled.classAttribute().value((int)actualClassValue);
+            double result = cls.classifyInstance(inst);
+
+            //will print your predicted value
+            String prediction=labeled.classAttribute().value((int)result );
+
+            double clsLabel = cls.classifyInstance(unknownInstances.instance(i));
+
+            //System.out.println(unknownInstances.instance(i));
             labeled.instance(i).setClassValue(clsLabel);
+
             System.out.println("Index of predicted class label: " + clsLabel + ", which corresponds to class: " + classes.get(new Double(clsLabel).intValue()));
         }
         //System.out.println("\nNew, labeled = \n" + labeled);
@@ -78,6 +89,7 @@ public class WekaRunner {
 
     private AttributeSelectedClassifier loadClassifier() throws Exception {
         // deserialize model
+        String modelFile = "src/main/resources/Model_05.model";
         return (AttributeSelectedClassifier) weka.core.SerializationHelper.read(modelFile);
     }
 
