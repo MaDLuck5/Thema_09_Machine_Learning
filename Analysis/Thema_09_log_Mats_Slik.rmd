@@ -396,10 +396,10 @@ train2$data.class <- as.factor(train2$Tumor)
 ```
 ```{r Data exportation}
 #train2 <- train2[,-1]
-write.arff(train.orig, file = "data/train.orig.arff")
-write.arff(test, file = "data/test_data.arff")
-write.arff(train2, file = "data/train2.arff")
-write.arff(train3, file = "data/train3.arff")
+write.arff(train.orig, file = "Analysis/data/train.orig.arff")
+write.arff(test, file = "Analysis/data/test_data.arff")
+write.arff(train2, file = "Analysis/data/train2.arff")
+write.arff(train3, file = "Analysis/data/train3.arff")
 ```
 ## Models
 
