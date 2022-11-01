@@ -1,7 +1,10 @@
 package nl.bioinf;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import weka.classifiers.meta.AttributeSelectedClassifier;
-import weka.classifiers.rules.ZeroR;
+import weka.classifiers.Classifier;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -52,14 +55,20 @@ public class WekaRunner {
     private void classifyNewInstance(AttributeSelectedClassifier tree, Instances unknownInstances) throws Exception {
         // create copy
         Instances labeled = new Instances(unknownInstances);
-        String[] attributeValues = {"T1", "T2", "T3", "T4"};
         // label instances
+        final List<String> classes = new ArrayList<>() {
+            {
+                add("T1");
+                add("T2");
+                add("T3");
+                add("T4");
+            }
+        };
         for (int i = 0; i < unknownInstances.numInstances(); i++) {
             double clsLabel = tree.classifyInstance(unknownInstances.instance(i));
             System.out.println(unknownInstances.instance(i));
             labeled.instance(i).setClassValue(clsLabel);
-            String result = attributeValues[(int) clsLabel];
-            System.out.println("instance classified as:" + result);;
+            System.out.println("Index of predicted class label: " + clsLabel + ", which corresponds to class: " + classes.get(new Double(clsLabel).intValue()));
         }
         //System.out.println("\nNew, labeled = \n" + labeled);
     }
