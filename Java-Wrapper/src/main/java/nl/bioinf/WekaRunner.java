@@ -2,7 +2,7 @@ package nl.bioinf;
 
 
 
-import weka.classifiers.meta.AttributeSelectedClassifier;
+import weka.classifiers.Classifier;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 
@@ -25,7 +25,7 @@ public class WekaRunner {
             //printInstances(instances);
             //AttributeSelectedClassifier attributeselected = buildClassifier(instances);
             //saveClassifier(attributeselected);
-            AttributeSelectedClassifier fromFile = loadClassifier();
+            Classifier fromFile = loadClassifier();
             Instances unknownInstances = loadArff(testFile);
             unknownInstances.setClassIndex(1);
             //System.out.println("\nunclassified unknownInstances = \n" + unknownInstances);
@@ -36,7 +36,7 @@ public class WekaRunner {
         }
     }
 
-    private void classifyNewInstance(AttributeSelectedClassifier tree, Instances unknownInstances) throws Exception {
+    private void classifyNewInstance(Classifier tree, Instances unknownInstances) throws Exception {
         // create copy
         Instances labeled = new Instances(unknownInstances);
         String[] attributeValues = {"T1", "T2", "T3", "T4"};
@@ -54,10 +54,10 @@ public class WekaRunner {
 
 
 
-    private AttributeSelectedClassifier loadClassifier() throws Exception {
+    private Classifier loadClassifier() throws Exception {
         // deserialize model
         String modelFile = "src/main/resources/Model_06_zeror.model";
-        return (AttributeSelectedClassifier) weka.core.SerializationHelper.read(modelFile);
+        return (Classifier) weka.core.SerializationHelper.read(modelFile);
     }
 
 
