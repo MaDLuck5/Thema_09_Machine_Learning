@@ -1,7 +1,6 @@
 package nl.bioinf;
 
 
-
 import weka.classifiers.Classifier;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
@@ -57,11 +56,9 @@ public class WekaRunner {
 
     private Classifier loadClassifier() throws Exception {
         // deserialize model
-        String modelFile = "/Model_06_zeror.model";
+        String modelFile = "/Model_04.model";
         try {
             InputStream in = getClass().getResourceAsStream(modelFile);
-
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             return (Classifier) SerializationHelper.read(in);
             // Use resource
 //             (Classifier) weka.core.SerializationHelper.read(reader);
@@ -69,8 +66,7 @@ public class WekaRunner {
             e.printStackTrace();
             return null;
         }
-
-}
+    }
 
 
     private Instances loadArff(String datafile) throws IOException {
