@@ -5,8 +5,13 @@ package nl.bioinf;
 import weka.classifiers.Classifier;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
+import weka.core.SerializationHelper;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.Arrays;
 
 
 public class WekaRunner {
@@ -21,14 +26,9 @@ public class WekaRunner {
         String testFile = args[0];
         System.out.println("Data File loaded:" + testFile);
         try {
-            //Instances instances = loadArff(datafile);
-            //printInstances(instances);
-            //AttributeSelectedClassifier attributeselected = buildClassifier(instances);
-            //saveClassifier(attributeselected);
             Classifier fromFile = loadClassifier();
             Instances unknownInstances = loadArff(testFile);
             unknownInstances.setClassIndex(1);
-            //System.out.println("\nunclassified unknownInstances = \n" + unknownInstances);
             classifyNewInstance(fromFile, unknownInstances);
 
         } catch (Exception e) {
@@ -36,39 +36,41 @@ public class WekaRunner {
         }
     }
 
-    private void classifyNewInstance(Classifier tree, Instances unknownInstances) throws Exception {
+    private void classifyNewInstance(Classifier myClassifier, Instances unknownInstances) throws Exception {
         // create copy
         Instances labeled = new Instances(unknownInstances);
         String[] attributeValues = {"T1", "T2", "T3", "T4"};
         // label instances
         for (int i = 0; i < unknownInstances.numInstances(); i++) {
             int maxAt = 0;
-            double[] distributions = tree.distributionForInstance(unknownInstances.instance(i));
-
-            System.out.println(unknownInstances.instance(i));
-
+            double[] distributions = myClassifier.distributionForInstance(unknownInstances.instance(i));
             // getting the position of the biggest value in the array
             for (int j = 0; j < distributions.length; j++) {
                 maxAt = distributions[j] > distributions[maxAt] ? j : maxAt;
             }
-
             String temp = attributeValues[maxAt];
-
             labeled.instance(i).setClassValue(maxAt);
-            System.out.println("instance" + labeled.instance(i) + "classified as:" + attributeValues[maxAt]);
-
+            System.out.println("classified as:" + attributeValues[maxAt]);
+            System.out.println("Probability distribution for classes:" + Arrays.toString(attributeValues) + Arrays.toString(distributions));
         }
-
     }
-
-
-
 
     private Classifier loadClassifier() throws Exception {
         // deserialize model
-        String modelFile = "src/main/resources/Model-01_27_10.model";
-        return (Classifier) weka.core.SerializationHelper.read(modelFile);
-    }
+        String modelFile = "/Model_06_zeror.model";
+        try {
+            InputStream in = getClass().getResourceAsStream(modelFile);
+
+            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            return (Classifier) SerializationHelper.read(in);
+            // Use resource
+//             (Classifier) weka.core.SerializationHelper.read(reader);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+
+}
 
 
     private Instances loadArff(String datafile) throws IOException {
