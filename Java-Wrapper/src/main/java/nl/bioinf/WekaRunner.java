@@ -42,13 +42,23 @@ public class WekaRunner {
         String[] attributeValues = {"T1", "T2", "T3", "T4"};
         // label instances
         for (int i = 0; i < unknownInstances.numInstances(); i++) {
-            double clsLabel = tree.classifyInstance(unknownInstances.instance(i));
+            int maxAt = 0;
+            double[] distributions = tree.distributionForInstance(unknownInstances.instance(i));
+
             System.out.println(unknownInstances.instance(i));
-            labeled.instance(i).setClassValue(clsLabel);
-            String result = attributeValues[(int) clsLabel];
-            System.out.println("instance classified as:" + result);
+
+            // getting the position of the biggest value in the array
+            for (int j = 0; j < distributions.length; j++) {
+                maxAt = distributions[j] > distributions[maxAt] ? j : maxAt;
+            }
+
+            String temp = attributeValues[maxAt];
+
+            labeled.instance(i).setClassValue(maxAt);
+            System.out.println("instance" + labeled.instance(i) + "classified as:" + attributeValues[maxAt]);
+
         }
-        //System.out.println("\nNew, labeled = \n" + labeled);
+
     }
 
 
@@ -56,7 +66,7 @@ public class WekaRunner {
 
     private Classifier loadClassifier() throws Exception {
         // deserialize model
-        String modelFile = "src/main/resources/Model_06_zeror.model";
+        String modelFile = "src/main/resources/Model-01_27_10.model";
         return (Classifier) weka.core.SerializationHelper.read(modelFile);
     }
 
