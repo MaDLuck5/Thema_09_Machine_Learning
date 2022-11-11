@@ -38,16 +38,9 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(ggExtra)
-library(gridExtra)
 library(stringr)
-library(hrbrthemes)
-library(viridis)
 library(RWeka)
 library(MatrixGenerics)
-library(here)
-library(smotefamily)
-library(recipes)
-library(caret)
 library(RWeka)
 
 
@@ -359,6 +352,7 @@ cleaned_merged_data$Tumor <- factor(cleaned_merged_data$Tumor)
 ```{r plot figure , fig.cap = "distribution of amount of samples per tumor stage"}
 plot(cleaned_merged_data$Tumor, ylab = "Count", xlab="tumor stage", col ="#F9C000", main = "distribution of tumor stage")
 ```
+/newpage
 
 
 # Supervised Learning
@@ -372,85 +366,511 @@ Weka is used for the data examination and machine learning part, Weka is a open 
 Firstly the data is exported to a .arff file so it can be loaded into Weka
 
 
+
 ### Data imbalance
 ```{r}
-set.seed(420)
-
-
-train <- createDataPartition(cleaned_merged_data$Tumor,
-                             p = 0.7, # % of data going to training
-                             times = 1,
-                             list = F)
-train.orig <- cleaned_merged_data[ train,]
-test       <- cleaned_merged_data[-train,]
-
-train.orig <- train.orig[,c(-1,-3:-5)]
-test       <- test[,c(-1,-3:-5)]
-
-train.orig$data.class <- as.factor(train.orig$Tumor)
-test$data.class <- as.factor(test$Tumor)
-
-train2 <- cleaned_merged_data[,c(-3:-5)]
+train2 <- cleaned_merged_data[, -3:-5]
 train3 <- train2[,-2]
 train2$data.class <- as.factor(train2$Tumor)
 ```
 ```{r Data exportation}
 #train2 <- train2[,-1]
-write.arff(train.orig, file = "Analysis/data/train.orig.arff")
-write.arff(test, file = "Analysis/data/test_data.arff")
-write.arff(train2, file = "Analysis/data/train2.arff")
 write.arff(train3, file = "Analysis/data/train3.arff")
 ```
 ## Models
 
-#### zeroR
+### experimenter
+To firstly make a simple comparison for the effectiveness of the different algorithms we shall use the Weka experimenter.
+the algorithms compared are as follows in the tabel beneath. note ZeroR is left out since it trows a error when running in the experimenter.
 
-The first algoritme used is a zeroR one is produced the following results
-=== Summary ===
+\begin{table}[thb]
+\caption{\label{Weka Experimenter algorithms}Tabel with the algorithms with default settings used in initial comparison .}
+\footnotesize
+\begin{tabular}{l}
+ (1) rules.OneR '-B 6' -3459427003147861500 \\
+ (2) trees.RandomTree '-K 0 -M 1.0 -V 0.001 -S 38' -9051119597407395800 \\
+ (3) trees.RandomForest '-P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 38' 1116839470751428740 \\
+ (4) trees.J48 '-C 0.25 -M 2' -217733168393644448 \\
+ (5) meta.AttributeSelectedClassifier '-E \"CfsSubsetEval -P 6 -E 6\"  -S \"GreedyStepwise -T -1.7976931348623157E308 -N -1 -num-slots 1\" -W trees.J48 -- -C 0.25 -M 2' -1151805453487947520 \\
+ (6) meta.AttributeSelectedClassifier '-E \"CfsSubsetEval -P 6 -E 6\"  -S \"BestFirst -D 2 -N 5\" -W trees.J48 -- -C 0.25 -M 2' -1151805453487947520 \\
+ (7) meta.AttributeSelectedClassifier '-E \"CfsSubsetEval -P 6 -E 6\"  -S \"BestFirst -D 2 -N 5\" -W trees.RandomForest -- -P 100 -I 100 -num-slots 1 -K 0 -M 1.0 -V 0.001 -S 1' -1151805453487947520 \\
+ (8) meta.AttributeSelectedClassifier '-E \"CfsSubsetEval -P 6 -E 6\"  -S  \"BestFirst -D 2 -N 5\" -W trees.RandomTree -- -K 0 -M 1.0 -V 0.001 -S 38' -1151805453487947520
+\end{tabular}
+\end{table}
 
-Correctly Classified Instances          51               66.2338 %
-Incorrectly Classified Instances        26               33.7662 %
-Kappa statistic                          0
-Mean absolute error                      0.2665
-Root mean squared error                  0.3613
-Relative absolute error                100      %
-Root relative squared error            100      %
-Total Number of Instances               77
+the results are as follows
 
-##### confusion matrix
+\begin{table}[thb]
+\caption{\label{Weka Experimenter Results}Tabel with a T test performed on the percentage each algoritme correctly predicted.}
+\footnotesize
+\begin{tabular}{l|llllllll}
+ Dataset & (1) rules.On  & (2) trees & (3) trees & (4) trees & (5) meta. & (6) meta. & (7) meta. & (8) meta.  \\ \hline
+ R data frame & 59.74 & 50.65 & 66.23 & 35.06 * & 45.45 & 42.86 * & 62.34 & 46.75 \\
+ significance  & (v/ /*)  & (0/1/0) & (0/1/0) & (0/0/1) & (0/1/0) & (0/0/1) & (0/1/0) & (0/1/0)
+\end{tabular}
+\end{table}
 
-=== Confusion Matrix ===
+##### Conclusion \newline
 
-  a  b  c  d   <-- classified as
-  0 10  0  0 |  a = T1
-  0 51  0  0 |  b = T2
-  0 11  0  0 |  c = T3
-  0  5  0  0 |  d = T4
+ as we can see from these results nothing really stands out from the rest, the all perform quit bad especially if u compare it with the OneR and ZeroR.
+this is due to having a lot of attributes in my date with relatively a low number of instances, so overfitting is a major issue. This forces use to make some selection in atributes. this in turn forces us the meta.AttributeSelectedClassifier to first make a selection of the attributes and further refine these classifiers.
 
-#### RandomTree
+So for further testing we firstly make a good baseline with the zeroR and further make comparisons with mutiple combinations of the meta.AttributeSelectedClassifier and its parameters. \newline
 
-#####
+First these are the results for some of the used AttributeSelectedClassifier, after showing these results we shall make a conclusion about which algorithm performs the best.
+All of the following test runs have been made with crossvallidation with the leave one out method to maximise the limited number of instances in the data
+\newpage
 
-#### RandomForest
+### ZeroR
 
-#####
+The first algorithm used is a zeroR one is produced the following results \newline
 
-#### J48
 
-#####
+\begin{table}[tbh]
+\caption{\label{Results ZeroR}Tabel with the summary of results from zeroR}
+\footnotesize
+\begin{tabular}{l|ll}
+ Correctly Classified Instances & 51 & 66.2338 \\ \hline
+ Incorrectly Classified Instances & 26 & 33.7662 \\ \hline
+ Kappa statistic  & 0 & x \\ \hline
+ Mean absolute error & 0.2665 & x \\ \hline
+ Root mean squared error & 0.3613 & x \\ \hline
+ Relative absolute error & 100 & x \\ \hline
+ Root relative squared error & 100 & x \\ \hline
+ Total Number of Instances & 77 & x
+\end{tabular}
+\end{table}
 
-#### AttributeSelectedClassifier
 
-##### J48 CfsSubsetEval GreedyStepwise
+##### confusion matrix \newline
 
-##### J48 CfsSubsetEval BestFirst Bi directional
+\begin{table}[tbh]
+\caption{\label{ZeroR Confusion matrix}Confusion matrix}
+\begin{tabular}{llll|l}
+ a & b & c & d & <-- classified as \\ \hline
+ 0 & 10 & 0 & 0 & a = T1 \\ \hline
+ 0 & 51 & 0 & 0 & b = T2 \\ \hline
+ 0 & 11 & 0 & 0 & c = T3 \\ \hline
+ 0 & 5 & 0 & 0 & d = T4
+\end{tabular}
+\end{table}
 
-##### J48 CfsSubsetEval BestFirst Forward
+##### algorithm conclusion \newline
 
-##### J48 ClassifierSubsetEval Ranker
+As we can see from the results of ZeroR that even classifing everything as T2 scores 66% good, thus using that as a base of evaluationg the classifiers used is not very reliable and we shall take the confusing matrix and ROC curves more as a indication for a good algoritme to use for oure data.
+\newpage
 
-#### Adaboost-M1 AttributeSelectedClassifier CfsSubsetEval Ranker
+### AttributeSelectedClassifier with cost sensitive J48 \newline
+Relation:     R_data_frame \newline
+Instances:    77 \newline
+Attributes:   9200 \newline
+Test mode:    77-fold cross-validation \newline
+Evaluation cost matrix: \newline
 
-##### Randomforest  CfsSubsetEval BestFirst Bi-directrional
+\begin{table}[tbh]
+\begin{tabular}{llll}
+ 0 & 5 & 2 & 2 \\
+ 1 & 0 & 1 & 1 \\
+ 1 & 5 & 0 & 2 \\
+ 2 & 5 & 2 & 0 \\
 
-##### RandomTree  CfsSubsetEval BestFirst Bi-directrional
+\end{tabular}
+\end{table}
+
+=== Attribute Selection on all input data === \newline
+
+Search Method: \newline
+    Best first. \newline
+    Start set: no attributes \newline
+    Search direction: forward \newline
+    Stale search after 5 node expansions \newline
+    Total number of subsets evaluated: 211334 \newline
+    Merit of the best subset found:    0.601 \newline
+
+Attribute Subset Evaluator (supervised, Class (nominal): 9200 data.class): \newline
+    CFS Subset Evaluator \newline
+    Including locally predictive attributes \newline
+
+Selected attributes: 338,905,1188,1230,1555,2172,2277,2821,3196,3333,3719,3932,5844,6802,7234,7490,7959,8149,8538 : 19 \newline
+                     NP_008832
+                     NP_056289
+                     NP_001349
+                     NP_055719
+                     NP_001150
+                     NP_079093
+                     NP_000959
+                     NP_004893
+                     NP_004887
+                     NP_065901
+                     NP_058632
+                     NP_002630
+                     NP_060947
+                     NP_065109
+                     NP_848613
+                     NP_001035147
+                     NP_005639
+                     NP_001092102
+                     NP_001135757 \newline
+
+\begin{table}[tbh]
+\caption{\label{Results cost sensitive Results with attribute selector}Tabel with the summary of results from zeroR}
+\footnotesize
+\begin{tabular}{l|ll}
+ Correctly Classified Instances & 22 & 28.5 \\ \hline
+ Incorrectly Classified Instances & 55 & 71.4 \\ \hline
+ Kappa statistic  & -0.1735 & x \\ \hline
+ Total Cost &  135 \\ \hline
+ Average Cost & 1.7532 \\ \hline
+ Mean absolute error &  0.3473 & x \\ \hline
+ Root mean squared error & 0.5733 & x \\ \hline
+ Relative absolute error & 129.1465 & x \\ \hline
+ Root relative squared error & 156.9896 & x \\ \hline
+ Total Number of Instances & 77 & x
+\end{tabular}
+\end{table}
+
+
+
+
+#### confusion matrix \newline
+
+\begin{table}[tbh]
+\caption{\label{cost sensitive J48 Confusion matrix}Confusion matrix}
+\begin{tabular}{llll|l}
+ a & b & c & d & <-- classified as \\ \hline
+ 1 & 7 & 2 & 0 & a = T1 \\ \hline
+ 8 & 19 & 19 & 5 & b = T2 \\ \hline
+ 2 & 8 & 1 & 0 & c = T3 \\ \hline
+ 0 & 4 & 0 & 1 & d = T4
+\end{tabular}
+\end{table}
+\newpage
+
+### AttributeSelectedClassifier HoeffdingTree
+Relation:     R_data_frame \newline
+Instances:    77 \newline
+Attributes:   9200 \newline
+Test mode:    77-fold cross-validation \newline
+Evaluation cost matrix: \newline
+
+\begin{table}[tbh]
+\begin{tabular}{llll}
+ 0 & 5 & 2 & 2 \\
+ 1 & 0 & 1 & 1 \\
+ 1 & 5 & 0 & 2 \\
+ 2 & 5 & 2 & 0 \\
+
+\end{tabular}
+\end{table}
+
+=== Attribute Selection on all input data === \newline
+
+Search Method: \newline
+    Best first. \newline
+    Start set: no attributes \newline
+    Search direction: bi-directional \newline
+    Stale search after 5 node expansions \newline
+    Total number of subsets evaluated: 248373 \newline
+    Merit of best subset found:    0.604 \newline
+
+Attribute Subset Evaluator (supervised, Class (nominal): 9200 data.class): \newline
+    CFS Subset Evaluator \newline
+    Including locally predictive attributes \newline
+
+Selected attributes: 338,1188,1230,1555,2172,2277,2844,3196,3333,3719,3932,5844,6802,7234,7490,7959,8149,8538 : 18 \newline
+                     NP_008832
+                     NP_001349
+                     NP_055719
+                     NP_001150
+                     NP_079093
+                     NP_000959
+                     NP_877496
+                     NP_004887
+                     NP_065901
+                     NP_058632
+                     NP_002630
+                     NP_060947
+                     NP_065109
+                     NP_848613
+                     NP_001035147
+                     NP_005639
+                     NP_001092102
+                     NP_001135757 \newline
+
+\begin{table}[tbh]
+\caption{\label{Results attribute selector with HoeffdingTree}Tabel with the summary of results from HoeffdingTree}
+\footnotesize
+\begin{tabular}{l|ll}
+ Correctly Classified Instances & 45 & 58.4 \\ \hline
+ Incorrectly Classified Instances & 32 & 41.5 \\ \hline
+ Kappa statistic  & -0.0584 & x \\ \hline
+ Mean absolute error &  0.2337 & x \\ \hline
+ Root mean squared error & 0.4332 & x \\ \hline
+ Relative absolute error & 86.9241 & x \\ \hline
+ Root relative squared error & 118.6126 & x \\ \hline
+ Total Number of Instances & 77 & x
+\end{tabular}
+\end{table}
+
+
+
+
+#### confusion matrix \newline
+
+\begin{table}[tbh]
+\caption{label{HoeffdingTree confusionmatrix}Confusion matrix}
+\begin{tabular}{llll|l}
+ a & b & c & d & <-- classified as \\ \hline
+ 0 & 9 & 1 & 0 & a = T1 \\ \hline
+ 5 & 45 & 1 & 0 & b = T2 \\ \hline
+ 1 & 10 & 0 & 0 & c = T3 \\ \hline
+ 0 & 5 & 0 & 0 & d = T4
+\end{tabular}
+\end{table}
+\newpage
+
+### AttributeSelectedClassifier Ranker RandomTree
+Relation:     R_data_frame \newline
+Instances:    77 \newline
+Attributes:   9200 \newline
+Test mode:    77-fold cross-validation \newline
+Evaluation cost matrix: \newline
+
+\begin{table}[tbh]
+\begin{tabular}{llll}
+ 0 & 5 & 2 & 2 \\
+ 1 & 0 & 1 & 1 \\
+ 1 & 5 & 0 & 2 \\
+ 2 & 5 & 2 & 0 \\
+
+\end{tabular}
+\end{table}
+
+=== Attribute Selection on all input data === \newline
+
+Search Method: \newline
+    Attribute ranking. \newline
+
+Attribute Evaluator (supervised, Class (nominal): 9200 data.class): \newline
+    Gain Ratio feature evaluator \newline
+
+Ranked attributes: \newline
+ 0.735       4526 NP_071896 \newline
+ 0.735       6015 NP_004840 \newline
+ 0.735       1443 NP_006786 \newline
+ 0.735       1312 NP_002829 \newline
+ 0.65        8523 NP_002351 \newline
+ 0.532       2172 NP_079093 \newline
+ 0.49        1230 NP_055719 \newline
+ 0.481       5384 NP_006346 \newline
+ 0.481       2277 NP_000959 \newline
+ 0.481       4206 NP_000960 \newline
+ 0.481       8329 NP_000981 \newline
+ 0.439       1188 NP_001349 \newline
+
+Selected attributes: 4526,6015,1443,1312,8523,2172,1230,5384,2277,4206,8329,1188 : 12 \newline
+
+
+Header of reduced data: \newline
+@relation 'R_data_frame-weka.filters.unsupervised.attribute.Remove-V-R4526,6015,1443,1312,8523,2172,1230,5384,2277,4206,8329,1188,9200' \newline
+
+@attribute NP_071896 numeric \newline
+@attribute NP_004840 numeric \newline
+@attribute NP_006786 numeric \newline
+@attribute NP_002829 numeric \newline
+@attribute NP_002351 numeric \newline
+@attribute NP_079093 numeric \newline
+@attribute NP_055719 numeric \newline
+@attribute NP_006346 numeric \newline
+@attribute NP_000959 numeric \newline
+@attribute NP_000960 numeric \newline
+@attribute NP_000981 numeric \newline
+@attribute NP_001349 numeric \newline
+
+
+\begin{table}[tbh]
+\caption{\label{Results of attribute selector with ranker }Tabel with the summary of results from Randomtree }
+\footnotesize
+\begin{tabular}{l|ll}
+ Correctly Classified Instances & 42 & 54.5 \\ \hline
+ Incorrectly Classified Instances & 35 & 45.5 \\ \hline
+ Kappa statistic  & 0.1126 & x \\ \hline
+ Mean absolute error &  0.226 & x \\ \hline
+ Root mean squared error & 0.4726 & x \\ \hline
+ Relative absolute error & 84.0 & x \\ \hline
+ Root relative squared error & 129.4 & x \\ \hline
+ Total Number of Instances & 77 & x
+\end{tabular}
+\end{table}
+
+
+
+
+#### confusion matrix
+
+\begin{table}[tbh]
+\caption{label{RandomTree confusionmatrix}Confusion matrix}
+\begin{tabular}{llll|l}
+ a & b & c & d & <-- classified as \\ \hline
+ 3 & 4 & 3 & 0 & a = T1 \\ \hline
+ 3 & 38 & 7 & 3 & b = T2 \\ \hline
+ 5 & 6 & 0 & 0 & c = T3 \\ \hline
+ 0 & 4 & 0 & 1 & d = T4
+\end{tabular}
+\end{table}
+\newpage
+
+### AttributeSelectedClassifier greedystepwise with OneR
+Relation:     R_data_frame \newline
+Instances:    77 \newline
+Attributes:   9200 \newline
+Test mode:    77-fold cross-validation \newline
+Evaluation cost matrix: \newline
+
+
+
+=== Attribute Selection on all input data === \newline
+
+Search Method: \newline
+    Greedy Stepwise (forwards). \newline
+    Start set: no attributes \newline
+    Merit of best subset found:    0.601 \newline
+
+Attribute Subset Evaluator (supervised, Class (nominal): 9200 data.class): \newline
+    CFS Subset Evaluator \newline
+    Including locally predictive attributes \newline
+
+Selected attributes: 338,905,1188,1230,1555,2172,2277,2821,3196,3333,3719,3932,5844,6802,7234,7490,7959,8149,8539 : 19 \newline
+                     NP_008832
+                     NP_056289
+                     NP_001349
+                     NP_055719
+                     NP_001150
+                     NP_079093
+                     NP_000959
+                     NP_004893
+                     NP_004887
+                     NP_065901
+                     NP_058632
+                     NP_002630
+                     NP_060947
+                     NP_065109
+                     NP_848613
+                     NP_001035147
+                     NP_005639
+                     NP_001092102
+                     NP_001017 \newline
+
+\begin{table}[tbh]
+\caption{\label{OneR results}Tabel with the summary of results from OneR}
+\footnotesize
+\begin{tabular}{l|ll}
+ Correctly Classified Instances & 45 & 58.44 \\ \hline
+ Incorrectly Classified Instances & 32 & 41.55 \\ \hline
+ Kappa statistic  & -0.0788 & x \\ \hline
+ Total Cost &  133   \\ \hline
+ Average Cost &  1.7273 \\ \hline
+ Mean absolute error &  0.2078 & x \\ \hline
+ Root mean squared error & 0.4558 & x \\ \hline
+ Relative absolute error & 77.2714 & x \\ \hline
+ Root relative squared error & 124.8216 & x \\ \hline
+ Total Number of Instances & 77 & x
+\end{tabular}
+\end{table}
+
+
+
+
+#### confusion matrix
+
+\begin{table}[tbh]
+\caption{label{greedystepwise with OneR confusionmatrix}Confusion matrix}
+\begin{tabular}{llll|l}
+ a & b & c & d & <-- classified as \\ \hline
+ 0 & 9 & 1 & 0 & a = T1 \\ \hline
+ 2 & 45 & 4 & 0 & b = T2 \\ \hline
+ 0 & 11 & 0 & 0 & c = T3 \\ \hline
+ 0 & 5 & 0 & 0 & d = T4
+\end{tabular}
+\end{table}
+\newpage
+
+## Supervised Learning Conclusion
+
+#### summary
+these are but the best of the multiple different settings that where tried, but all results where the same as these presented in the chapters here above. one if not the first things that stands out for every one of these results is that none of these results scored an accuracy of correctly predicting the class of the data better than ZeroR with its 66.2%. One got close but that was a RandomTree model without attributeselection, so it is questionable how accurate its truly is since overfitting with 9200 attributes is a major problem. But accuracy of correctly prediction the class is not everything, so we must also look at the confusion matrix's that where produced.
+As can be seen from the confusion matrix's (tables 20,22,24,26) there are two trends visible that firstly there is a huge bias towards t2, this was tried to be compensated with different SMOTE functions to boost the underrepresented classes but added more than 75 % of synthetic data is not very accurate and introduces a whole host of new problems and bias to the algorithm used to boost the unrepresented classes. Furthermore, under sampling the T2 class also was not an option since cutting out instances in a data set only containing 77 is not good since this is already a very low sample size.
+Thus, most of the models that where teste where with the meta learning AttributeSelectedClassifier , and yielded not much as explained above. One more thing can be said that there is one more conclusion that can be drawn from the models that where tried is that if not all most of them selected these attributes : \newline NP_008832
+,NP_056289,NP_001349,NP_055719,NP_001150,NP_079093,NP_000959,NP_004893,NP_004887,NP_065901,NP_058632,NP_002630,NP_060947,NP_065109,NP_848613,NP_001035147,NP_005639,NP_001092102,NP_001017 \newline
+These can be of interest for further research after collecting more instance / samples.
+
+#### FINAL MODEL
+So after all this what was the final model ?
+it's a  Cost sensetive classifiere using Adaboost M1 running a rondomTree with Seed 38.
+first off this model is not correct in any way and is not good. One it is likely overfitted since it uses all 9200 attributes.
+Two the cost matrix is wrong since it contains a mistake. Three its accuracy and cost matrix are still not good, but its ROC is one of the best found. \newline
+it results are follows:
+=== Run information ===
+
+Scheme:       weka.classifiers.meta.CostSensitiveClassifier -cost-matrix "[0.0 20.0 20.0 20.0; 1.0 0.0 1.0 1.0; 20.0 20.0 0.0 20.0; 20.0 20.0 1.0 0.0]" -S 38 -W weka.classifiers.meta.AdaBoostM1 -- -P 100 -S 38 -I 10 -W weka.classifiers.trees.RandomTree -- -K 0 -M 1.0 -V 0.001 -S 38 \newline
+Relation:     R_data_frame \newline
+Instances:    77 \newline
+Attributes:   9200 \newline
+              [list of attributes omitted] \newline
+Test mode:    77-fold cross-validation \newline
+
+=== Classifier model (full training set) === \newline
+
+CostSensitiveClassifier using reweighted training instances \newline
+
+weka.classifiers.meta.AdaBoostM1 -P 100 -S 38 -I 10 -W weka.classifiers.trees.RandomTree -- -K 0 -M 1.0 -V 0.001 -S 38 \newline
+
+Classifier Model \newline
+AdaBoostM1: No boosting possible, one classifier used! \newline
+
+Cost Matrix \newline
+  0 20 20 20 \newline
+  1  0  1  1 \newline
+ 20 20  0 20 \newline
+ 20 20  1  0 \newline
+
+
+Time taken to build model: 0.05 seconds \newline
+\newline
+=== Summary === \newline
+
+Correctly Classified Instances          37               48.0519 % \newline
+Incorrectly Classified Instances        40               51.9481 % \newline
+Kappa statistic                         -0.0052 \newline
+Total Cost                             116      \newline
+Average Cost                             1.5065 \newline
+Mean absolute error                      0.2582 \newline
+Root mean squared error                  0.5062 \newline
+Relative absolute error                 96. \newline
+Root relative squared error            138.6 \newline
+Total Number of Instances               77     \newline
+
+=== Detailed Accuracy By Class === \newline
+
+\begin{table}[tbh]
+\caption{label{Final model accuracy} final model accuracy }
+\begin{tabular}{l|lllllllll}
+ TP Rate & FP Rate & Precision & Recall  & F-Measure & MCC   &   ROC Area & PRC Area & Class \\
+   & 0,100  &  0,134  &  0,100   &   0,100  &  0,100    &  -0,034   &  0,494  &  0,133  &   T1 \\
+   & 0,647  &  0,692  &  0,647   &   0,647  &  0,647    &   -0,045  &  0,535  &  0,709  &   T2 \\
+   & 0,273  &  0,167  &  0,214   &   0,273  &  0,240    &  0,096    & 0,594   &  0,177  &   T3 \\
+   & 0,000  &  0,028  &  0,000   &   0,000  &  0,000    &   -0,043  & 0,631   &  0,112  &   T4 \\
+  Weighted Avg. & 0,481  &  0,502  &  0,472   &   0,481  &  0,476   &   -0,023 &  0,545  &   0,520 &
+
+\end{tabular}
+\end{table}
+\newpage
+
+
+=== Confusion Matrix === \newline
+
+  a  b  c  d   <-- classified as \newline
+  1  7  2  0 |  a = T1 \newline
+  8 33  8  2 |  b = T2 \newline
+  0  8  3  0 |  c = T3 \newline
+  1  3  1  0 |  d = T4 \newline
