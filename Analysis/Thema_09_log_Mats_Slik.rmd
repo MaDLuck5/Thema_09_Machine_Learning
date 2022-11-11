@@ -800,7 +800,9 @@ Selected attributes: 338,905,1188,1230,1555,2172,2277,2821,3196,3333,3719,3932,5
 #### summary
 these are but the best of the multiple different settings that where tried, but all results where the same as these presented in the chapters here above. one if not the first things that stands out for every one of these results is that none of these results scored an accuracy of correctly predicting the class of the data better than ZeroR with its 66.2%. One got close but that was a RandomTree model without attributeselection, so it is questionable how accurate its truly is since overfitting with 9200 attributes is a major problem. But accuracy of correctly prediction the class is not everything, so we must also look at the confusion matrix's that where produced.
 As can be seen from the confusion matrix's (tables 20,22,24,26) there are two trends visible that firstly there is a huge bias towards t2, this was tried to be compensated with different SMOTE functions to boost the underrepresented classes but added more than 75 % of synthetic data is not very accurate and introduces a whole host of new problems and bias to the algorithm used to boost the unrepresented classes. Furthermore, under sampling the T2 class also was not an option since cutting out instances in a data set only containing 77 is not good since this is already a very low sample size.
-Thus, most of the models that where teste where with the meta learning AttributeSelectedClassifier , and yielded not much as explained above. One more thing can be said that there is one more conclusion that can be drawn from the models that where tried is that if not all most of them selected these attributes : \newline NP_008832
+Thus, most of the models that where teste where with the meta learning AttributeSelectedClassifier , and yielded not much as explained above.
+The main thing that can be said of all the methods and algorithems used is they performed all bad or equally bad as just picking a random class.
+One more thing is that a significant portion the models that where tried with the AttributeSelectedClassifier is that they almost all chose these  attributes : \newline NP_008832
 ,NP_056289,NP_001349,NP_055719,NP_001150,NP_079093,NP_000959,NP_004893,NP_004887,NP_065901,NP_058632,NP_002630,NP_060947,NP_065109,NP_848613,NP_001035147,NP_005639,NP_001092102,NP_001017 \newline
 These can be of interest for further research after collecting more instance / samples.
 
@@ -808,7 +810,9 @@ These can be of interest for further research after collecting more instance / s
 So after all this what was the final model ?
 it's a  Cost sensetive classifiere using Adaboost M1 running a rondomTree with Seed 38.
 first off this model is not correct in any way and is not good. One it is likely overfitted since it uses all 9200 attributes.
-Two the cost matrix is wrong since it contains a mistake. Three its accuracy and cost matrix are still not good, but its ROC is one of the best found. \newline
+Two the cost matrix is wrong since it contains a mistake. Three its accuracy and cost matrix are still not good, but its ROC is one of the best found.
+it can be found here in the repository`Models/Model-01_27_10.model`
+\newline
 it results are follows:
 === Run information ===
 
