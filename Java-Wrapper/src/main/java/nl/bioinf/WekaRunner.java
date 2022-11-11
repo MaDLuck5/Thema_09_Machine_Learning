@@ -6,10 +6,9 @@ import weka.core.Instances;
 import weka.core.converters.ConverterUtils.DataSource;
 import weka.core.SerializationHelper;
 
-import java.io.BufferedReader;
+
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 
 
@@ -49,19 +48,19 @@ public class WekaRunner {
             }
             String temp = attributeValues[maxAt];
             labeled.instance(i).setClassValue(maxAt);
-            System.out.println("classified as:" + attributeValues[maxAt]);
-            System.out.println("Probability distribution for classes:" + Arrays.toString(attributeValues) + Arrays.toString(distributions));
+            System.out.println("ID: " + labeled.instance(i).value(1) + ", Classified as: " + attributeValues[maxAt]);
+            System.out.println(" Probability distribution for classes:" + Arrays.toString(attributeValues) + Arrays.toString(distributions));
         }
     }
 
     private Classifier loadClassifier() throws Exception {
         // deserialize model
-        String modelFile = "/Model_04.model";
+        String modelFile = "/Model-01_27_10.model";
         try {
             InputStream in = getClass().getResourceAsStream(modelFile);
             return (Classifier) SerializationHelper.read(in);
             // Use resource
-//             (Classifier) weka.core.SerializationHelper.read(reader);
+//
         } catch (Exception e) {
             e.printStackTrace();
             return null;
