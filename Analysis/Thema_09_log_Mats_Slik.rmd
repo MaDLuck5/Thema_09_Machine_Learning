@@ -266,7 +266,7 @@ and we now have a data set that contains data with less than 10% per protein of 
 
 ### Merging clinical and protein expression dataframes
 
-to be able to use the Clinical dat we need to merge it to its corresponding row and sample in the Protein expressions
+to be able to use the Clinical data we need to merge it to its corresponding row and sample in the Protein expressions
 ```{r data merging}
 # firs assigning row names to clinical data
 rownames(clinical_data) <- clinical_data$Complete.TCGA.ID
@@ -301,10 +301,10 @@ boxplot(merged_data[6:76],
 #dev.off()
 ```
 
-Since i can't be sure of the significant of every protein I can't simply trow away any sample
+Since i can't be sure of the significance of every protein I can't simply trow away any sample
 
 to fix this i shall get the standard deviation from every protein to prepare for a selection of the most deviant ones.
-and for illustration i will overlay the dataframe which has been filtered from most NA values
+and for illustration i will overlay the dataframe which has filtered out the proteins with more than 10% of their values being NA
 
 ```{r plot making4, fig.cap = "scatterplot of standard deviation for the protein expresion data and for the NA filterd version", out.width = "90%"}
 
@@ -341,7 +341,7 @@ ggsave(
 ```
 
 
-as we can see in the standard deviation compared from proteins with a lot of samples with NA in them to the filtered data, we see that the proteins with a lot of NA in them seem to be having a higher Standard deviation, but still there should be enough deviation in the filtered Data.
+as we can see in the standard deviation plot from the proteins it is visible that  the proteins with a lot of NA in them seem to be having a higher Standard deviation, but still there should be enough deviation in the filtered Data to use it for further analyse using machine learning.
 ```{r Assigning factors}
 # assigning as factors
 merged_data$Tumor <- factor(merged_data$Tumor)
@@ -366,8 +366,7 @@ Weka is used for the data examination and machine learning part, Weka is a open 
 Firstly the data is exported to a .arff file so it can be loaded into Weka
 
 
-
-### Data imbalance
+### data exportation
 ```{r}
 train2 <- cleaned_merged_data[, -3:-5]
 train3 <- train2[,-2]
@@ -417,11 +416,14 @@ this is due to having a lot of attributes in my date with relatively a low numbe
 
 So for further testing we firstly make a good baseline with the zeroR and further make comparisons with mutiple combinations of the meta.AttributeSelectedClassifier and its parameters. \newline
 
-First these are the results for some of the used AttributeSelectedClassifier, after showing these results we shall make a conclusion about which algorithm performs the best.
+The next set of test where done in the weka explorer gui. \newline
+
+The first of these is a ZeroR and the rest are the results of a few of the best AttributeSelectedClassifier, since most of them are extremely poor performing and not worthy of mentioning the results at all.
+After showing these results we shall make a conclusion about which algorithm performs the best.
 All of the following test runs have been made with crossvallidation with the leave one out method to maximise the limited number of instances in the data
 \newpage
 
-### ZeroR
+### ZeroR \newline
 
 The first algorithm used is a zeroR one is produced the following results \newline
 
@@ -444,6 +446,7 @@ The first algorithm used is a zeroR one is produced the following results \newli
 
 ##### confusion matrix \newline
 
+
 \begin{table}[tbh]
 \caption{\label{ZeroR Confusion matrix}Confusion matrix}
 \begin{tabular}{llll|l}
@@ -461,6 +464,10 @@ As we can see from the results of ZeroR that even classifing everything as T2 sc
 \newpage
 
 ### AttributeSelectedClassifier with cost sensitive J48 \newline
+
+This is the second algorithm used, and this is using attribute selection with sub set evaluation based on the best first method.
+as a cost matrix I assigned every wrongly classified instance as class T2 extra heavy since that class is overrepresented, and further weight that every clas that is wrongly classified a little heavier
+
 Relation:     R_data_frame \newline
 Instances:    77 \newline
 Attributes:   9200 \newline
@@ -546,6 +553,11 @@ Selected attributes: 338,905,1188,1230,1555,2172,2277,2821,3196,3333,3719,3932,5
 \end{table}
 \newpage
 
+##### algorithm conclusion \newline
+
+in the above seen confusion matrix we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case. So this algorithm doesn't have a lot of merit for further exploration
+
+
 ### AttributeSelectedClassifier HoeffdingTree
 Relation:     R_data_frame \newline
 Instances:    77 \newline
@@ -628,6 +640,10 @@ Selected attributes: 338,1188,1230,1555,2172,2277,2844,3196,3333,3719,3932,5844,
 \end{tabular}
 \end{table}
 \newpage
+
+##### algorithm conclusion \newline
+
+in the above seen confusion matrix we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case, and it classifies them mostly as t1 and t2. So this algorithm doesn't have a lot of merit for further exploration
 
 ### AttributeSelectedClassifier Ranker RandomTree
 Relation:     R_data_frame \newline
@@ -720,6 +736,10 @@ Header of reduced data: \newline
 \end{table}
 \newpage
 
+##### algorithm conclusion \newline
+
+in the above seen confusion matrix we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case, and it classifies them mostly wrong as t2. So this algorithm doesn't have a lot of merit for further exploration
+
 ### AttributeSelectedClassifier greedystepwise with OneR
 Relation:     R_data_frame \newline
 Instances:    77 \newline
@@ -795,6 +815,10 @@ Selected attributes: 338,905,1188,1230,1555,2172,2277,2821,3196,3333,3719,3932,5
 \end{table}
 \newpage
 
+##### algorithm conclusion \newline
+
+in the above seen confusion matrix we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case, we can see that is mostly classify them as T2. So this algorithm doesn't have a lot of merit for further exploration
+
 ## Supervised Learning Conclusion
 
 #### summary
@@ -804,6 +828,7 @@ Thus, most of the models that where teste where with the meta learning Attribute
 The main thing that can be said of all the methods and algorithems used is they performed all bad or equally bad as just picking a random class.
 One more thing is that a significant portion the models that where tried with the AttributeSelectedClassifier is that they almost all chose these  attributes : \newline NP_008832
 ,NP_056289,NP_001349,NP_055719,NP_001150,NP_079093,NP_000959,NP_004893,NP_004887,NP_065901,NP_058632,NP_002630,NP_060947,NP_065109,NP_848613,NP_001035147,NP_005639,NP_001092102,NP_001017 \newline
+
 These can be of interest for further research after collecting more instance / samples.
 
 #### FINAL MODEL
