@@ -114,17 +114,17 @@ here we can see a clear bias towards T2.
 the results are as seen in table 3
 
 \begin{table}[thb]
-\caption{\label{Weka Experimenter Results}Tabel with a T test performed on the percentage each algoritme correctly predicted.}
+\caption{\label{Weka Experimenter Results}Tabel with a T test performed on the percentage each algorithm correctly predicted.}
 \footnotesize
 \begin{tabular}{l|llllllll}
  Dataset & (1) rules.On  & (2) trees & (3) trees & (4) trees & (5) meta. & (6) meta. & (7) meta. & (8) meta.  \\ \hline
- R data frame & 59.74 & 50.65 & 66.23 & 35.06 * & 45.45 & 42.86 * & 62.34 & 46.75 \\
- significance  & (v/ /*)  & (0/1/0) & (0/1/0) & (0/0/1) & (0/1/0) & (0/0/1) & (0/1/0) & (0/1/0)
+ percentage correctly classified & 59.74 & 50.65 & 66.23 & 35.06 * & 45.45 & 42.86 * & 62.34 & 46.75 \\
+ Significance   & (v = better/ Same /* = Worse)  & (0/1/0) & (0/1/0) & (0/0/1) & (0/1/0) & (0/0/1) & (0/1/0) & (0/1/0)
 \end{tabular}
 \end{table}
 
-as we can see from these results nothing really stands out from the rest, the all perform quit bad especially if u compare it with the OneR and ZeroR.
-this is due to having a lot of attributes in my date with relatively a low number of instances, so overfitting is a major issue. This forces use to make some selection in atributes. this in turn forces us the meta.AttributeSelectedClassifier to first make a selection of the attributes and further refine these classifiers.
+as  can bee seen from these results in table 3 nothing really stands out from the rest, they all perform quit bad especially if u compare it with the OneR and ZeroR.
+For further, because of these result and the dimensions of the data set as seen in tabel 1 and figure 5, further machine learning will be focused on the AttributeSelectedClassifier
 
 So for further testing we firstly make a good baseline with the zeroR and further make comparisons with mutiple combinations of the meta.AttributeSelectedClassifier and its parameters. \newline
 
@@ -132,7 +132,7 @@ The next set of test where done in the weka explorer gui. \newline
 
 The first of these is a ZeroR and the rest are the results of a few of the best AttributeSelectedClassifier, since most of them are extremely poor performing and not worthy of mentioning the results at all.
 After showing these results we shall make a conclusion about which algorithm performs the best.
-All of the following test runs have been made with crossvallidation with the leave one out method to maximise the limited number of instances in the data.
+All of the following test runs have been made with crossvallidation with the leave one out method to maximise the limited number of instances in the data. \newline
 ##### ZeroR  \newline
 \begin{table}[tbh]
 \caption{\label{Results ZeroR}Tabel with the summary of results from zeroR}
@@ -160,13 +160,12 @@ All of the following test runs have been made with crossvallidation with the lea
 \end{tabular}
 \end{table}
 
-As we can see from the results of ZeroR that even classifing everything as T2 scores 66% good, thus using that as a base of evaluationg the classifiers used is not very reliable and we shall take the confusing matrix and ROC curves more as a indication for a good algoritme to use for oure data. \newline
-
-
-This is the second algorithm used, and this is using attribute selection with sub set evaluation based on the best first method.
-as a cost matrix I assigned every wrongly classified instance as class T2 extra heavy since that class is overrepresented, and further weight that every clas that is wrongly classified a little heavier
+As we can see from the results of ZeroR in *tabel 5* that even classifying everything as T2 scores 66% good, thus using that as a base of evaluationg the classifiers used is not very reliable and we shall take the confusing matrix as the first metric to see if a particular model has any merit to for further analyses and testing/ \newline
 
 ##### AttributeSelectedClassifier with cost sensitive J48 \newline
+
+This is the second algorithm used, and this is using attribute selection with sub set evaluation based on the best first method.
+as a cost matrix in I assigned every wrongly classified instance as class T2 extra heavy since that class is overrepresented, furthermore it is added that every clas that is wrongly classified is weight little heavier than a T2 class that is wronly classified.
 
 Relation:     R_data_frame \newline
 Instances:    77 \newline
@@ -230,9 +229,11 @@ Selected attributes: 338,905,1188,1230,1555,2172,2277,2821,3196,3333,3719,3932,5
 \end{table}
 \newpage
 
-in the above seen confusion matrix we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case. So this algorithm doesn't have a lot of merit for further exploration
+in the above seen confusion matrix *table 7* we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case. So this algorithm doesn't have a lot of merit for further exploration
 
 ##### AttributeSelectedClassifier HoeffdingTree  \newline
+
+In this third algorithm a HoeffdingTree was used as the base algorithm, although this algorithm is normally used for web based streaming inputs and thus not really applicable to this data. it was one of the better ones according to its accuracy but worse on other aspect as well see further on in its results.
 
 Relation:     R_data_frame \newline
 Instances:    77 \newline
@@ -295,7 +296,7 @@ Selected attributes: 338,1188,1230,1555,2172,2277,2844,3196,3333,3719,3932,5844,
 \end{table}
 \newpage
 
-in the above seen confusion matrix we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case, and it classifies them mostly as t1 and t2. So this algorithm doesn't have a lot of merit for further exploration, and is not on its own not good
+in the above seen confusion matrix *table 9* we are still looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case, and it classifies them mostly as t1 and t2.
 
 ##### AttributeSelectedClassifier Ranker RandomTree  \newline
 
@@ -408,6 +409,7 @@ Selected attributes: 338,905,1188,1230,1555,2172,2277,2821,3196,3333,3719,3932,5
 
 in the above seen confusion matrix we are looking for a nicely made line from the top left to the bottom right, but we can clearly see that that is not the case, we can see that is mostly classify them as T2. So this algorithm doesn't have a lot of merit for further exploration \newline
 
+#### Machine learning summary /newline
 
 these are but the best of the multiple different settings that where tried, but all results where the same as these presented in the chapters here above. one if not the first things that stands out for every one of these results is that none of these results scored an accuracy of correctly predicting the class of the data better than ZeroR with its 66.2%. One got close but that was a RandomTree model without attributeselection, so it is questionable how accurate its truly is. But accuracy of correctly prediction the class is not everything, so we must also look at the confusion matrix's that where produced.
 As can be seen from the confusion matrix's (tables ) there are two trends visible that firstly there is a huge bias towards t2
@@ -421,8 +423,8 @@ One more thing is that a significant portion the models that where tried with th
 # Discussion and Conclusion  \newline
 
 In the results' section we can see from the figures 1 and two that although the data set was supplied with the label as high quality there are still proteins in the data with
-more tha 10% of there expression values missing, this combined with the need for using the expressing data with the clinical categorical data, the sample names needed to be changed to be compared.
-all this wasn't something to be expecting of high quality data. also in figure 5 it is clearly visible that the categorisation of the tumor stage there are a lot of T2 stages in the samples than any other.
+more tha 10% of there expression values missing, this combined with the need for using the expressing data with the clinical categorical data, the sample names needed to be changed to be compare.
+all this wasn't something expected of high quality data. also in figure 5 it is clearly visible that T2 stage is oversampled and creates a bias in every alogoritme used, in the samples than any other.
 furthermore the sheer amount of proteins recorded in this data is very useful for my purpose of trying to use another classification as the PAM50 protein list
 <!-- (After-Body) -->
 ```{r after body, child = 'report/report-dependencies/after_body.Rmd'}
