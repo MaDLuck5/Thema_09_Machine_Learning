@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2022 Mats Slik.
+ * Licensed under GPLv3. See LICENSE file.
+ */
+
 package nl.bioinf;
 
 
@@ -11,15 +16,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Arrays;
 
-
+/**
+ * Main class for the Java wrapper around the machine learning model.
+ * Designed to work with user input provided through the command line.
+ * The class is final since it is not made to be extended.
+ *
+ * @author Mats SLik (344216)
+ */
 public class WekaRunner {
-
+    /**
+     * initialises the model and runs the prediction.
+     *
+     * @param args The command line arguments.
+     */
     public static void main(String[] args) {
         WekaRunner runner = new WekaRunner();
         runner.start(args);
     }
-
-    private void start(String[] args) {
+    /**
+     * Class that uses and implements part of the Weka Java API to classify instances.
+     * it reads the model from a .arff file and uses it to classify instances.
+     * @param args The command line argument.
+     */
+    public void start(String[] args) {
         //String datafile = args[0];
         String testFile = args[0];
         System.out.println("Data File loaded:" + testFile);
@@ -33,8 +52,13 @@ public class WekaRunner {
             e.printStackTrace();
         }
     }
-
-    private void classifyNewInstance(Classifier myClassifier, Instances unknownInstances) throws Exception {
+    /**
+     * @param myClassifier The classifier to use for the classification.
+     * @param unknownInstances a .arff file containing instances of protein expression data to be classified by the model.
+     * Prints the classified instances with the probability of the prediction.
+     * @throws Exception if the classification fails.
+     */
+    public void classifyNewInstance(Classifier myClassifier, Instances unknownInstances) throws Exception {
         // create copy
         Instances labeled = new Instances(unknownInstances);
         String[] attributeValues = {"T1", "T2", "T3", "T4"};
@@ -52,7 +76,9 @@ public class WekaRunner {
             System.out.println(" Probability distribution for classes:" + Arrays.toString(attributeValues) + Arrays.toString(distributions));
         }
     }
-
+    /**
+     * Loads the model from a .arff file.
+     */
     private Classifier loadClassifier() throws Exception {
         // deserialize model
         String modelFile = "/Model-01_27_10.model";
@@ -67,7 +93,9 @@ public class WekaRunner {
         }
     }
 
-
+    /**
+     * Loads the .arff file containing the instances to be classified.
+     */
     private Instances loadArff(String datafile) throws IOException {
         try {
             DataSource source = new DataSource(datafile);

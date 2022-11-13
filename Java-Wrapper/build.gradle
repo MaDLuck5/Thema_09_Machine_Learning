@@ -10,7 +10,7 @@ plugins {
 
 
 group 'nl.bioinf.mpslik.JavaWrapper'
-version '0.0.1'
+version '1.0.2'
 
 
 // Define the main class for the application
@@ -24,6 +24,7 @@ repositories {
 dependencies {
     // https://mvnrepository.com/artifact/nz.ac.waikato.cms.weka/weka-stable
     implementation group: 'nz.ac.waikato.cms.weka', name: 'weka-stable', version: '3.8.6'
+    implementation 'org.jetbrains:annotations:20.1.0'
     testImplementation group: 'junit', name: 'junit', version: '4.13.1'
 }
 
