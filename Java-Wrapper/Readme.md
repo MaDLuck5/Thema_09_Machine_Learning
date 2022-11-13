@@ -22,10 +22,13 @@ to classify a new instance, use the following command:
 ```java -jar <program_name> <path_to_instance>```
 
 #### Example
-```java -jar .\MLModelWrapperApplication1-1.0.2-all.jar <path to .arff file>```
+```java -jar .\MLModelWrapperApplication1-1.0.2-all.jar C:\Users\matsp\Documents\Thema-09\Project_thema_09\Analysis\data\train3.arff```
+
 
 ## files
-MLModelWrapperApplication1-1.0.2-all.jar found in ```./build/libs/```
+MLModelWrapperApplication1-1.0.2-all.jar found in ```./build/libs/``` the Java wrapper in a Jar
+
+train3.arff: a arff file in the correct format for usage with the build java wrapper found in ```../Analysis/data/```
 ## Support
 
 For Help, contact: M.p.slik@st.hanze.nl
