@@ -1,0 +1,28 @@
+@relation ThresholdCurve
+
+@attribute Instance_number numeric
+@attribute 'True Positives' numeric
+@attribute 'False Negatives' numeric
+@attribute 'False Positives' numeric
+@attribute 'True Negatives' numeric
+@attribute 'False Positive Rate' numeric
+@attribute 'True Positive Rate' numeric
+@attribute Precision numeric
+@attribute Recall numeric
+@attribute Fallout numeric
+@attribute FMeasure numeric
+@attribute 'Sample Size' numeric
+@attribute Lift numeric
+@attribute Threshold numeric
+
+@data
+0,10,0,67,0,1,1,0.12987,1,0.87013,0.229885,1,1,-0
+1,10,0,66,1,0.985075,1,0.131579,1,0.868421,0.232558,0.987013,1.013158,-0
+2,10,0,65,2,0.970149,1,0.133333,1,0.866667,0.235294,0.974026,1.026667,-0
+3,10,0,64,3,0.955224,1,0.135135,1,0.864865,0.238095,0.961039,1.040541,-0
+4,10,0,63,4,0.940299,1,0.136986,1,0.863014,0.240964,0.948052,1.054795,-0
+5,10,0,62,5,0.925373,1,0.138889,1,0.861111,0.243902,0.935065,1.069444,0
+6,1,9,10,57,0.149254,0.1,0.090909,0.1,0.909091,0.095238,0.142857,0.7,0
+7,1,9,9,58,0.134328,0.1,0.1,0.1,0.9,0.1,0.12987,0.77,0.173913
+8,1,9,8,59,0.119403,0.1,0.111111,0.1,0.888889,0.105263,0.116883,0.855556,1
+9,0,10,0,67,0,0,?,0,?,?,0,?,1.00001
