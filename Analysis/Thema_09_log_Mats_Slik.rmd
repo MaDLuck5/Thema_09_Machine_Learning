@@ -363,13 +363,13 @@ after that there shall be a examination of the result and accuracy of the create
 ## Weka
 
 Weka is used for the data examination and machine learning part, Weka is a open source collection of machine learning algorithms for data mining tasks. It contains tools for data preparation, classification, regression, clustering, association rules mining, and visualization. java platform for
-Firstly the data is exported to a .arff file so it can be loaded into Weka
+Firstly the data is exported to a .arff file, so it can be loaded into Weka
 
 
 ### data exportation
 ```{r}
 train2 <- cleaned_merged_data[, -3:-5]
-train3 <- train2[,-2]
+train3 <- train2[,-1]
 train2$data.class <- as.factor(train2$Tumor)
 ```
 ```{r Data exportation}
@@ -838,6 +838,15 @@ first off this model is not correct in any way and is not good. One it is likely
 Two the cost matrix is wrong since it contains a mistake. Three its accuracy and cost matrix are still not good, but its ROC is one of the best found.
 it can be found here in the repository`Models/Model-01_27_10.model`
 \newline
+
+```{r}
+roc.control <- read.arff("../data/weka_out/roc_control.arff")
+
+ggplot(data = roc.control) +
+  geom_point(aes(`False Positive Rate`, `True Positive Rate`, colour = Threshold))
+```
+
+
 it results are follows:
 === Run information ===
 
@@ -884,7 +893,7 @@ Total Number of Instances               77     \newline
 \begin{table}[tbh]
 \caption{label{Final model accuracy} final model accuracy }
 \begin{tabular}{l|lllllllll}
- TP Rate & FP Rate & Precision & Recall  & F-Measure & MCC   &   ROC Area & PRC Area & Class \\
+  & TP Rate & FP Rate & Precision & Recall  & F-Measure & MCC   &   ROC Area & PRC Area & Class \\
    & 0,100  &  0,134  &  0,100   &   0,100  &  0,100    &  -0,034   &  0,494  &  0,133  &   T1 \\
    & 0,647  &  0,692  &  0,647   &   0,647  &  0,647    &   -0,045  &  0,535  &  0,709  &   T2 \\
    & 0,273  &  0,167  &  0,214   &   0,273  &  0,240    &  0,096    & 0,594   &  0,177  &   T3 \\
