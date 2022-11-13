@@ -101,7 +101,6 @@ public class WekaRunner {
             DataSource source = new DataSource(datafile);
             Instances data = source.getDataSet();
             // setting class attribute if the data format does not provide this information
-            // For example, the XRFF format saves the class attribute information as well
             if (data.classIndex() == -1)
                 data.setClassIndex(data.numAttributes() - 1);
             return data;
