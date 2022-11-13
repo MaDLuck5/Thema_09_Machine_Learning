@@ -5,6 +5,7 @@ email: "m.p.slik@st.hanze.nl"
 
 output: pdf_document
 
+
 ---
 
 <!-- (Front page) -->
@@ -38,13 +39,15 @@ library(tidyr)
 library(dplyr)
 library(ggplot2)
 library(ggExtra)
+library(ggpubr)
 library(stringr)
 library(RWeka)
 library(MatrixGenerics)
-library(RWeka)
+
 
 
 knitr::opts_knit$set(root.dir = here::here())
+knitr::opts_chunk$set(fig.pos = 'H')
 ```
 
 \newpage
@@ -657,7 +660,7 @@ Evaluation cost matrix: \newline
  0 & 5 & 2 & 2 \\
  1 & 0 & 1 & 1 \\
  1 & 5 & 0 & 2 \\
- 2 & 5 & 2 & 0 \\
+ 2 & 5 & 2 & 0
 
 \end{tabular}
 \end{table}
@@ -822,7 +825,7 @@ in the above seen confusion matrix we are looking for a nicely made line from th
 ## Supervised Learning Conclusion
 
 #### summary
-these are but the best of the multiple different settings that where tried, but all results where the same as these presented in the chapters here above. one if not the first things that stands out for every one of these results is that none of these results scored an accuracy of correctly predicting the class of the data better than ZeroR with its 66.2%. One got close but that was a RandomTree model without attributeselection, so it is questionable how accurate its truly is since overfitting with 9200 attributes is a major problem. But accuracy of correctly prediction the class is not everything, so we must also look at the confusion matrix's that where produced.
+these are but the best of the multiple different settings that where tried, but all results where the same as these presented in the chapters here above. one if not the first things that stands out for every one of these results is that none of these results scored an accuracy of correctly predicting the class of the data better than ZeroR with its 66.2%. One got close but that was a RandomTree model without attributeselection, so it is questionable how accurate its truly is since overwriting with 9200 attributes is a major problem. But accuracy of correctly prediction the class is not everything, so we must also look at the confusion matrix's that where produced.
 As can be seen from the confusion matrix's (tables 20,22,24,26) there are two trends visible that firstly there is a huge bias towards t2, this was tried to be compensated with different SMOTE functions to boost the underrepresented classes but added more than 75 % of synthetic data is not very accurate and introduces a whole host of new problems and bias to the algorithm used to boost the unrepresented classes. Furthermore, under sampling the T2 class also was not an option since cutting out instances in a data set only containing 77 is not good since this is already a very low sample size.
 Thus, most of the models that where teste where with the meta learning AttributeSelectedClassifier , and yielded not much as explained above.
 The main thing that can be said of all the methods and algorithems used is they performed all bad or equally bad as just picking a random class.
@@ -835,15 +838,31 @@ These can be of interest for further research after collecting more instance / s
 So after all this what was the final model ?
 it's a  Cost sensetive classifiere using Adaboost M1 running a rondomTree with Seed 38.
 first off this model is not correct in any way and is not good. One it is likely overfitted since it uses all 9200 attributes.
-Two the cost matrix is wrong since it contains a mistake. Three its accuracy and cost matrix are still not good, but its ROC is one of the best found.
+Two the cost matrix is wrong since it contains a mistake. Three its accuracy and cost matrix are still not good, but its ROC is one of the best found, although it is till a very bad one see figure 5
 it can be found here in the repository`Models/Model-01_27_10.model`
 \newline
 
-```{r}
-roc.control <- read.arff("../data/weka_out/roc_control.arff")
+```{r roc plot, fig.cap = "Plotting of Roc curve per class", out.width = "90%"}
+roc.t1 <- read.arff("Analysis//data//ROCplots//T1_roc.arff")
+roc.t2 <- read.arff("Analysis//data//ROCplots//T2_roc.arff")
+roc.t3 <- read.arff("Analysis//data//ROCplots//T3_roc.arff")
+roc.t4 <- read.arff("Analysis//data//ROCplots//T4_roc.arff")
 
-ggplot(data = roc.control) +
+t1plot <- ggplot(data = roc.t1) +
   geom_point(aes(`False Positive Rate`, `True Positive Rate`, colour = Threshold))
+
+t2plot <- ggplot(data = roc.t2) +
+  geom_point(aes(`False Positive Rate`, `True Positive Rate`, colour = Threshold))
+
+t3plot <- ggplot(data = roc.t3) +
+  geom_point(aes(`False Positive Rate`, `True Positive Rate`, colour = Threshold))
+
+t4plot <- ggplot(data = roc.t4) +
+  geom_point(aes(`False Positive Rate`, `True Positive Rate`, colour = Threshold))
+
+ggarrange(t1plot, t2plot, t3plot, t4plot,
+          labels = c("T1 ROC", "T2 ROC", "T3 ROC", "T4 ROC"),
+          ncol = 2, nrow = 2)
 ```
 
 
@@ -859,7 +878,7 @@ Test mode:    77-fold cross-validation \newline
 
 === Classifier model (full training set) === \newline
 
-CostSensitiveClassifier using reweighted training instances \newline
+CostSensitiveClassifier using reweighed training instances \newline
 
 weka.classifiers.meta.AdaBoostM1 -P 100 -S 38 -I 10 -W weka.classifiers.trees.RandomTree -- -K 0 -M 1.0 -V 0.001 -S 38 \newline
 
@@ -905,10 +924,14 @@ Total Number of Instances               77     \newline
 \newpage
 
 
-=== Confusion Matrix === \newline
-
-  a  b  c  d   <-- classified as \newline
-  1  7  2  0 |  a = T1 \newline
-  8 33  8  2 |  b = T2 \newline
-  0  8  3  0 |  c = T3 \newline
-  1  3  1  0 |  d = T4 \newline
+\begin{table}[tbh]
+\caption{label{cost sensitive Random Tree}Confusion matrix}
+\begin{tabular}{llll|l}
+ a & b & c & d & <-- classified as \\ \hline
+ 1 & 7 & 2 & 0 & a = T1 \\ \hline
+ 8 & 33 & 8 & 2 & b = T2 \\ \hline
+ 0 & 8 & 3 & 0 & c = T3 \\ \hline
+ 1 & 3 & 1 & 0 & d = T4
+\end{tabular}
+\end{table}
+\newpage
