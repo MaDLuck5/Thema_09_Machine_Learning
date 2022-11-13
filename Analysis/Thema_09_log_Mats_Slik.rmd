@@ -372,7 +372,7 @@ Firstly the data is exported to a .arff file, so it can be loaded into Weka
 ### data exportation
 ```{r}
 train2 <- cleaned_merged_data[, -3:-5]
-train3 <- train2[,-1]
+train3 <- train2[,-2]
 train2$data.class <- as.factor(train2$Tumor)
 ```
 ```{r Data exportation}
