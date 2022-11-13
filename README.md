@@ -55,6 +55,13 @@ Project_thema_09
 └───Report
     │   Report_Mats_Slik.pdf
     │   Report_Mats_Slik.rmd
+    └───report-dependencies
+            abreviations.tex
+            abstract.tex
+            after_body.rmd
+            before_body.tex
+            import.tex
+            references.bib
 ```
 
 it consists of three main things namely: 1.Analysis 2.Java-Wrapper 3.Report
